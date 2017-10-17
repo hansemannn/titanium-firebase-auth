@@ -257,4 +257,18 @@
   return [[TiBlob alloc] _initWithPageContext:self.pageContext andData:[[FIRAuth auth] APNSToken] mimetype:@"text/plain"];
 }
 
+- (FirebaseAuthAuthCredentialProxy *)createAuthCredential:(id)arguments
+{
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  TiFirebaseAuthProviderType provider = [TiUtils intValue:[arguments objectForKey:@"provider"] def:TiFirebaseAuthProviderTypeUnknown];
+  NSString *accessToken = [arguments objectForKey:@"accessToken"];
+  NSString *secretToken = [arguments objectForKey:@"secretToken"];
+  
+  return [[FirebaseAuthAuthCredentialProxy alloc] _initWithPageContext:self.pageContext
+                                                   andAuthProviderType:provider
+                                                           accessToken:accessToken
+                                                           secretToken:secretToken];
+}
+
 @end

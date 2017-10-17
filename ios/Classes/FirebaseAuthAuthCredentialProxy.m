@@ -9,10 +9,28 @@
 
 @implementation FirebaseAuthAuthCredentialProxy
 
-- (id)_initWithPageContext:(id<TiEvaluator>)context andAuthCredential:(FIRAuthCredential *)authCredential
+- (id)_initWithPageContext:(id<TiEvaluator>)context
+           andAuthProviderType:(TiFirebaseAuthProviderType)authProviderType
+               accessToken:(NSString *)accessToken
+               secretToken:(NSString *)secretToken
 {
   if (self = [super _initWithPageContext:context]) {
-    _authCredential = authCredential;
+    switch (authProviderType) {
+      case TiFirebaseAuthProviderTypeFacebook:
+        _authCredential = [FIRFacebookAuthProvider credentialWithAccessToken:accessToken];
+      case TiFirebaseAuthProviderTypeTwitter:
+        _authCredential = [FIRTwitterAuthProvider credentialWithToken:accessToken secret:secretToken];
+      case TiFirebaseAuthProviderTypeGoogle:
+        _authCredential = [FIRGoogleAuthProvider credentialWithIDToken:accessToken accessToken:secretToken];
+      case TiFirebaseAuthProviderTypeGithub:
+        _authCredential = [FIRGitHubAuthProvider credentialWithToken:accessToken];
+      case TiFirebaseAuthProviderTypePassword:
+        _authCredential = [FIREmailAuthProvider credentialWithEmail:accessToken password:secretToken];
+      case TiFirebaseAuthProviderTypePhone:
+        _authCredential = [[FIRPhoneAuthProvider provider] credentialWithVerificationID:accessToken verificationCode:secretToken];
+      default:
+        NSLog(@"[ERROR] Unknown auth-provider-type provided: %lu", authProviderType);
+    }
   }
   
   return self;

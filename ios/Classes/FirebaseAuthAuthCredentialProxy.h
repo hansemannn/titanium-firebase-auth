@@ -8,9 +8,27 @@
 
 #import <FirebaseAuth/FirebaseAuth.h>
 
+typedef enum TiFirebaseAuthProviderType: NSUInteger {
+  TiFirebaseAuthProviderTypeUnknown = 0,
+  TiFirebaseAuthProviderTypeFacebook,
+  TiFirebaseAuthProviderTypeTwitter,
+  TiFirebaseAuthProviderTypeGoogle,
+  TiFirebaseAuthProviderTypeGithub,
+  TiFirebaseAuthProviderTypePassword,
+  TiFirebaseAuthProviderTypePhone,
+  
+} TiFirebaseAuthProviderType;
+
 @interface FirebaseAuthAuthCredentialProxy : TiProxy {
 }
 
 @property (nonatomic, strong) FIRAuthCredential *authCredential;
+
+- (id)_initWithPageContext:(id<TiEvaluator>)context
+       andAuthProviderType:(TiFirebaseAuthProviderType)authProviderType
+               accessToken:(NSString *)accessToken
+               secretToken:(NSString *)secretToken;
+
+- (instancetype)init NS_UNAVAILABLE;
 
 @end
