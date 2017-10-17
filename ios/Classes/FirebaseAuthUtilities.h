@@ -7,12 +7,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class FIRUser;
+@class FIRUser, FIRAdditionalUserInfo;
 
 @interface FirebaseAuthUtilities : NSObject
 
 + (NSDictionary *_Nullable)dictionaryFromUser:(FIRUser *_Nullable)user;
 
 + (NSDictionary *_Nullable)dictionaryFromError:(NSError *_Nullable)error;
+
++ (NSDictionary *_Nullable)dictionaryFromAdditionalUserInfo:(FIRAdditionalUserInfo *_Nullable)additionalUserInfo;
 
 @end

@@ -9,6 +9,7 @@
 
 #import "FirebaseAuthModule.h"
 #import "FirebaseAuthUtilities.h"
+#import "FirebaseAuthAuthCredentialProxy.h"
 #import "TiBase.h"
 #import "TiHost.h"
 #import "TiUtils.h"
@@ -37,6 +38,28 @@
 
 #pragma Public APIs
 
+- (void)fetchProviders:(id)arguments
+{
+  ENSURE_UI_THREAD(fetchProviders, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  NSString *email;
+  KrollCallback *callback;
+
+  ENSURE_ARG_FOR_KEY(email, arguments, @"email", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+
+  [[FIRAuth auth] fetchProvidersForEmail:email
+                              completion:^(NSArray<NSString *> *providers, NSError *error) {
+                                if (error != nil) {
+                                  [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+                                  return;
+                                }
+
+                                [callback call:@[@{ @"success": @YES, @"providers": providers ?: @[] }] thisObject:self];
+                              }];
+}
+
 - (void)createUserWithEmail:(id)arguments
 {
   ENSURE_UI_THREAD(createUserWithEmail, arguments);
@@ -44,22 +67,21 @@
 
   NSString *email;
   NSString *password;
-  KrollCallback *successCallback;
-  KrollCallback *errorCallback;
+  KrollCallback *callback;
 
-  ENSURE_ARG_OR_NIL_FOR_KEY(email, arguments, @"email", NSString);
-  ENSURE_ARG_OR_NIL_FOR_KEY(password, arguments, @"password", NSString);
-  ENSURE_ARG_OR_NIL_FOR_KEY(successCallback, arguments, @"success", KrollCallback);
-  ENSURE_ARG_OR_NIL_FOR_KEY(errorCallback, arguments, @"error", KrollCallback);
+  ENSURE_ARG_FOR_KEY(email, arguments, @"email", NSString);
+  ENSURE_ARG_FOR_KEY(password, arguments, @"password", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
 
   [[FIRAuth auth] createUserWithEmail:email
                              password:password
                            completion:^(FIRUser *_Nullable user, NSError *_Nullable error) {
-                             if (errorCallback != nil && error != nil) {
-                               [errorCallback call:@[ [FirebaseAuthUtilities dictionaryFromError:error] ] thisObject:nil];
-                             } else if (successCallback != nil) {
-                               [successCallback call:@[ [FirebaseAuthUtilities dictionaryFromUser:user] ] thisObject:nil];
+                             if (error != nil) {
+                               [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+                               return;
                              }
+                             
+                             [callback call:@[@{ @"success": @TRUE, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
                            }];
 }
 
@@ -70,23 +92,112 @@
 
   NSString *email;
   NSString *password;
-  KrollCallback *successCallback;
-  KrollCallback *errorCallback;
+  KrollCallback *callback;
 
-  ENSURE_ARG_OR_NIL_FOR_KEY(email, arguments, @"email", NSString);
-  ENSURE_ARG_OR_NIL_FOR_KEY(password, arguments, @"password", NSString);
-  ENSURE_ARG_OR_NIL_FOR_KEY(successCallback, arguments, @"success", KrollCallback);
-  ENSURE_ARG_OR_NIL_FOR_KEY(errorCallback, arguments, @"error", KrollCallback);
+  ENSURE_ARG_FOR_KEY(email, arguments, @"email", NSString);
+  ENSURE_ARG_FOR_KEY(password, arguments, @"password", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
 
   [[FIRAuth auth] signInWithEmail:email
                          password:password
                        completion:^(FIRUser *user, NSError *error) {
-                         if (errorCallback != nil && error != nil) {
-                           [errorCallback call:@[ [FirebaseAuthUtilities dictionaryFromError:error] ] thisObject:nil];
-                         } else if (successCallback != nil) {
-                           [successCallback call:@[ [FirebaseAuthUtilities dictionaryFromUser:user] ] thisObject:nil];
+                         if (error != nil) {
+                           [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+                           return;
                          }
+                         
+                         [callback call:@[@{ @"success": @TRUE, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
                        }];
+}
+
+- (void)signInWithCredential:(id)arguments
+{
+  ENSURE_UI_THREAD(signInWithCredential, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  FirebaseAuthAuthCredentialProxy *credential;
+  KrollCallback *callback;
+  
+  ENSURE_ARG_FOR_KEY(credential, arguments, @"credential", FirebaseAuthAuthCredentialProxy);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+  
+  [[FIRAuth auth] signInWithCredential:[credential authCredential]
+                            completion:^(FIRUser *user, NSError *error) {
+                              if (error != nil) {
+                                [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+                                return;
+                              }
+                              
+                              [callback call:@[@{ @"success": @TRUE, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+                            }];
+}
+
+- (void)signInAndRetrieveDataWithCredential:(id)arguments
+{
+  ENSURE_UI_THREAD(signInAndRetrieveDataWithCredential, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  FirebaseAuthAuthCredentialProxy *credential;
+  KrollCallback *callback;
+  
+  ENSURE_ARG_FOR_KEY(credential, arguments, @"credential", FirebaseAuthAuthCredentialProxy);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+  
+  [[FIRAuth auth] signInAndRetrieveDataWithCredential:[credential authCredential]
+                                           completion:^(FIRAuthDataResult *_Nullable authResult,
+                                                        NSError *_Nullable error) {
+                                             if (error != nil) {
+                                               [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+                                               return;
+                                             }
+                              
+                                             [callback call:@[@{
+                                               @"success": @TRUE,
+                                               @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user],
+                                               @"additionalUserInfo": [FirebaseAuthUtilities dictionaryFromAdditionalUserInfo:authResult.additionalUserInfo]
+                                             }] thisObject:self];
+                            }];
+}
+
+- (void)signInAnonymously:(id)callback
+{
+  ENSURE_UI_THREAD(signInAnonymously, callback);
+  ENSURE_SINGLE_ARG(callback, KrollCallback);
+  
+  [[FIRAuth auth] signInAnonymouslyWithCompletion:^(FIRUser *user, NSError *error) {
+    if (error != nil) {
+      [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+      return;
+    }
+    
+    [callback call:@[@{ @"success": @TRUE, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+  }];
+}
+
+
+- (void)signInWithCustomToken:(id)arguments
+{
+  ENSURE_UI_THREAD(signInWithCustomToken, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  NSString *token;
+  KrollCallback *callback;
+  
+  ENSURE_ARG_FOR_KEY(token, arguments, @"token", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+  
+  [[FIRAuth auth] signInWithCustomToken:token
+                             completion:^(FIRUser *user, NSError *error) {
+                                             if (error != nil) {
+                                               [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+                                               return;
+                                             }
+                                             
+                                             [callback call:@[@{
+                                               @"success": @TRUE,
+                                               @"user": [FirebaseAuthUtilities dictionaryFromUser:user],
+                                             }] thisObject:self];
+                                           }];
 }
 
 - (void)signOut:(id)arguments
@@ -94,21 +205,19 @@
   ENSURE_UI_THREAD(signOut, arguments);
   ENSURE_SINGLE_ARG(arguments, NSDictionary);
 
-  KrollCallback *successCallback;
-  KrollCallback *errorCallback;
+  KrollCallback *callback;
 
-  ENSURE_ARG_OR_NIL_FOR_KEY(successCallback, arguments, @"success", KrollCallback);
-  ENSURE_ARG_OR_NIL_FOR_KEY(errorCallback, arguments, @"error", KrollCallback);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
 
   NSError *authError;
-  BOOL status = [[FIRAuth auth] signOut:&authError]; //Note: odd signOut seems to always return true!?
+  BOOL success = [[FIRAuth auth] signOut:&authError]; //Note: odd signOut seems to always return true!?
 
-  if (status && successCallback != nil) {
+  if (success && !authError) {
     // Sign-out succeeded
-    [successCallback call:@[ @"success" ] thisObject:nil];
-  } else if (errorCallback != nil) {
-    [errorCallback call:@[ [FirebaseAuthUtilities dictionaryFromError:authError] ] thisObject:nil];
+    [callback call:@[@{ @"success": NUMINT(YES) }] thisObject:self];
   }
+  
+  [callback call:@[ [FirebaseAuthUtilities dictionaryFromError:authError] ] thisObject:self];
 }
 
 - (void)sendPasswordResetWithEmail:(id)arguments
@@ -116,27 +225,36 @@
   ENSURE_UI_THREAD(sendPasswordResetWithEmail, arguments);
   ENSURE_SINGLE_ARG(arguments, NSDictionary);
 
-  KrollCallback *successCallback;
-  KrollCallback *errorCallback;
   NSString *email;
+  KrollCallback *callback;
 
-  ENSURE_ARG_OR_NIL_FOR_KEY(successCallback, arguments, @"success", KrollCallback);
-  ENSURE_ARG_OR_NIL_FOR_KEY(errorCallback, arguments, @"error", KrollCallback);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
   ENSURE_ARG_FOR_KEY(email, arguments, @"email", NSString);
 
   [[FIRAuth auth] sendPasswordResetWithEmail:email
                                   completion:^(NSError *error) {
-                                    if (errorCallback != nil && error != nil) {
-                                      [errorCallback call:@[ @{ @"success" : NUMBOOL(NO) } ] thisObject:nil];
-                                    } else if (successCallback != nil) {
-                                      [successCallback call:@[ @{ @"success" : NUMBOOL(YES) } ] thisObject:nil];
+                                    if (error != nil) {
+                                      [callback call:@[@{ @"success" : @NO }] thisObject:self];
+                                      return;
                                     }
+                                    
+                                    [callback call:@[@{ @"success" : @YES }] thisObject:self];
                                   }];
 }
 
 - (NSDictionary *)currentUser
 {
   return [FirebaseAuthUtilities dictionaryFromUser:[[FIRAuth auth] currentUser]];
+}
+
+- (NSString *)languageCode
+{
+  return NULL_IF_NIL([[FIRAuth auth] languageCode]);
+}
+
+- (TiBlob *)apnsToken
+{
+  return [[TiBlob alloc] _initWithPageContext:self.pageContext andData:[[FIRAuth auth] APNSToken] mimetype:@"text/plain"];
 }
 
 @end

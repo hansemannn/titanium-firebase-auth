@@ -35,8 +35,22 @@
   }
 
   return @{
+    @"success": @NO,
     @"code" : NUMINTEGER([error code]),
     @"description" : [error localizedDescription]
+  };
+}
+
++ (NSDictionary *)dictionaryFromAdditionalUserInfo:(FIRAdditionalUserInfo *)additionalUserInfo
+{
+  if (!additionalUserInfo) {
+    return nil;
+  }
+  
+  return @{
+    @"providerID": additionalUserInfo.providerID,
+    @"newUser": NUMBOOL(additionalUserInfo.isNewUser),
+    @"profile": additionalUserInfo.profile,
   };
 }
 

@@ -10,14 +10,28 @@
 @interface FirebaseAuthModule : TiModule {
 }
 
+- (void)fetchProviders:(id)arguments;
+
 - (void)createUserWithEmail:(id)arguments;
 
 - (void)signInWithEmail:(id)arguments;
+
+- (void)signInWithCredential:(id)arguments;
+
+- (void)signInAndRetrieveDataWithCredential:(id)arguments;
+
+- (void)signInAnonymously:(id)arguments;
+
+- (void)signInWithCustomToken:(id)arguments;
 
 - (void)signOut:(id)arguments;
 
 - (void)sendPasswordResetWithEmail:(id)arguments;
 
 - (NSDictionary *)currentUser;
+
+- (NSString *)languageCode;
+
+- (TiBlob *)apnsToken;
 
 @end
