@@ -8,13 +8,68 @@ Use the native Firebase SDK in Axway Titanium. This repository is part of the [T
 
 ### `FirebaseAuth`
 
-#### Methods
-TBA
-  
+#### Methods (*Arguments TBA*)
+
+##### `fetchProviders(parameters)` (Dictionary)
+
+##### `createUserWithEmail(parameters)` (Dictionary)
+
+##### `signInWithEmail(parameters)` (Dictionary)
+
+##### `signInWithCredential(parameters)` (Dictionary)
+
+##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary)
+
+##### `signInAnonymously(parameters)` (Dictionary)
+
+##### `signInWithCustomToken(parameters)` (Dictionary)
+
+##### `signOut(parameters)` (Dictionary)
+
+##### `sendPasswordResetWithEmail(parameters)` (Dictionary)
+
+##### `confirmPasswordResetWithCode(parameters)` (Dictionary)
+
+##### `checkActionCode(parameters)` (Dictionary)
+
+##### `verifyPasswordResetCode(parameters)` (Dictionary)
+
+##### `applyActionCode(parameters)` (Dictionary)
+
+##### `addAuthStateDidChangeListener(callback)` (Function)
+
+##### `removeAuthStateDidChangeListener()`
+
+##### `addIDTokenDidChangeListener(callback)` (Function)
+
+##### `removeIDTokenDidChangeListener()`
+
+#### Properties
+
+##### `currentUser` (Dictionary, get)
+
+##### `languageCode` (String, get)
+
+##### `apnsToken` (Ti.Blob, get)
+
 ## Example
 ```js
 // Require the Firebase Auth module
 var FirebaseAuth = require('firebase.auth');
+
+FirebaseAuth.signInWithEmail({
+  email: 'john@doe.com',
+  password: 't1r0ck$!',
+  callback: function(e) {
+    if (!e.success) {
+      Ti.API.error('Error: ' + e.error);
+      return;
+    }
+
+    Ti.API.info('Success!');
+    Ti.API.info(e.user);
+  }
+  });
 
 // More TBA
 ```

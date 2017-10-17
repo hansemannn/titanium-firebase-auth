@@ -16,7 +16,7 @@ typedef enum TiFirebaseAuthProviderType: NSUInteger {
   TiFirebaseAuthProviderTypeGithub,
   TiFirebaseAuthProviderTypePassword,
   TiFirebaseAuthProviderTypePhone,
-  
+  TiFirebaseAuthProviderTypeOAuth,
 } TiFirebaseAuthProviderType;
 
 @interface FirebaseAuthAuthCredentialProxy : TiProxy {
@@ -27,7 +27,9 @@ typedef enum TiFirebaseAuthProviderType: NSUInteger {
 - (id)_initWithPageContext:(id<TiEvaluator>)context
        andAuthProviderType:(TiFirebaseAuthProviderType)authProviderType
                accessToken:(NSString *)accessToken
-               secretToken:(NSString *)secretToken;
+               secretToken:(NSString *)secretToken
+                providerID:(NSString *)providerID
+                   IDToken:(NSString *)IDToken;
 
 - (instancetype)init NS_UNAVAILABLE;
 

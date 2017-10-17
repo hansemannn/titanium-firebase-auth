@@ -5,9 +5,12 @@
  * Copyright (c) 2017 Your Company. All rights reserved.
  */
 
+#import <FirebaseAuth/FirebaseAuth.h>
 #import "TiModule.h"
 
 @interface FirebaseAuthModule : TiModule {
+  id<NSObject> _authStateListenerHandle;
+  id<NSObject> _IDTokenListenerHandle;
 }
 
 - (void)fetchProviders:(id)arguments;
@@ -31,6 +34,18 @@
 - (void)confirmPasswordResetWithCode:(id)arguments;
 
 - (void)checkActionCode:(id)arguments;
+
+- (void)verifyPasswordResetCode:(id)arguments;
+
+- (void)applyActionCode:(id)arguments;
+
+- (void)addAuthStateDidChangeListener:(id)callback;
+
+- (void)removeAuthStateDidChangeListener:(id)unused;
+
+- (void)addIDTokenDidChangeListener:(id)callback;
+
+- (void)removeIDTokenDidChangeListener:(id)unused;
 
 - (NSDictionary *)currentUser;
 

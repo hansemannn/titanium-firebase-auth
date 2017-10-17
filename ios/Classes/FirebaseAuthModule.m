@@ -5,8 +5,6 @@
  * Copyright (c) 2017 Your Company. All rights reserved.
  */
 
-#import <FirebaseAuth/FirebaseAuth.h>
-
 #import "FirebaseAuthModule.h"
 #import "FirebaseAuthUtilities.h"
 #import "FirebaseAuthAuthCredentialProxy.h"
@@ -224,22 +222,35 @@
 {
   ENSURE_UI_THREAD(sendPasswordResetWithEmail, arguments);
   ENSURE_SINGLE_ARG(arguments, NSDictionary);
-
+  
   NSString *email;
   KrollCallback *callback;
-
+  NSDictionary *actionCodeSettings;
+  
   ENSURE_ARG_FOR_KEY(email, arguments, @"email", NSString);
+  ENSURE_ARG_OR_NIL_FOR_KEY(actionCodeSettings, arguments, @"actionCodeSettings", NSDictionary);
   ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+  
+  typedef void (^PasswordResetCompletionHandler)(NSError *);
 
+  PasswordResetCompletionHandler handler = ^(NSError *error) {
+    if (error != nil) {
+      [callback call:@[@{ @"success" : @NO }] thisObject:self];
+      return;
+    }
+    
+    [callback call:@[@{ @"success" : @YES }] thisObject:self];
+  };
+  
+  if (actionCodeSettings != nil) {
+    [[FIRAuth auth] sendPasswordResetWithEmail:email
+                            actionCodeSettings:[[FIRActionCodeSettings alloc] init]
+                                    completion:handler];
+    return;
+  }
+  
   [[FIRAuth auth] sendPasswordResetWithEmail:email
-                                  completion:^(NSError *error) {
-                                    if (error != nil) {
-                                      [callback call:@[@{ @"success" : @NO }] thisObject:self];
-                                      return;
-                                    }
-                                    
-                                    [callback call:@[@{ @"success" : @YES }] thisObject:self];
-                                  }];
+                                  completion:handler];
 }
 
 - (void)confirmPasswordResetWithCode:(id)arguments
@@ -288,6 +299,117 @@
                        }];
 }
 
+- (void)verifyPasswordResetCode:(id)arguments
+{
+  ENSURE_UI_THREAD(verifyPasswordResetCode, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  NSString *code;
+  KrollCallback *callback;
+  
+  ENSURE_ARG_FOR_KEY(code, arguments, @"code", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+  
+  [[FIRAuth auth] verifyPasswordResetCode:code
+                               completion:^(NSString *email, NSError *error) {
+                                 if (error != nil) {
+                                   [callback call:@[@{ @"success" : @NO }] thisObject:self];
+                                   return;
+                                 }
+                                 
+                                 [callback call:@[@{ @"success" : @YES, @"email": email }] thisObject:self];
+                               }];
+}
+
+- (void)applyActionCode:(id)arguments
+{
+  ENSURE_UI_THREAD(applyActionCode, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  NSString *code;
+  KrollCallback *callback;
+  
+  ENSURE_ARG_FOR_KEY(code, arguments, @"code", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+  
+  [[FIRAuth auth] applyActionCode:code
+                       completion:^(NSError *error) {
+                         if (error != nil) {
+                           [callback call:@[@{ @"success" : @NO }] thisObject:self];
+                           return;
+                         }
+                         
+                         [callback call:@[@{ @"success" : @YES }] thisObject:self];
+                       }];
+}
+
+- (void)addAuthStateDidChangeListener:(id)callback
+{
+  ENSURE_UI_THREAD(addAuthStateDidChangeListener, callback);
+  ENSURE_SINGLE_ARG(callback, KrollCallback);
+  
+  if (_authStateListenerHandle != nil) {
+    NSLog(@"[ERROR] Trying to add an auth-state-listener, but there is already an existing one! Call `removeAuthStateDidChangeListener` before.");
+  }
+  
+  _authStateListenerHandle = [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *auth, FIRUser *user) {
+    if (user != nil) {
+      [callback call:@[@{ @"success": @NO }] thisObject:self];
+      return;
+    }
+    
+    [callback call:@[@{ @"success": @YES, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+  }];
+}
+
+- (void)removeAuthStateDidChangeListener:(id)unused
+{
+  ENSURE_UI_THREAD(removeAuthStateDidChangeListener, unused);
+  
+  if (_authStateListenerHandle == nil) {
+    NSLog(@"[ERROR] Trying to remove an auth-state-listener, but there is no existing one! Call `addAuthStateDidChangeListener` before.");
+  }
+  
+  [[FIRAuth auth] removeAuthStateDidChangeListener:_authStateListenerHandle];
+  _authStateListenerHandle = nil;
+}
+
+- (void)addIDTokenDidChangeListener:(id)callback
+{
+  ENSURE_UI_THREAD(addAuthStateDidChangeListener, callback);
+  ENSURE_SINGLE_ARG(callback, KrollCallback);
+  
+  if (_IDTokenListenerHandle != nil) {
+    NSLog(@"[ERROR] Trying to add an auth-state-listener, but there is already an existing one! Call `removeIDTokenDidChangeListener` before.");
+  }
+  
+  _IDTokenListenerHandle = [[FIRAuth auth] addIDTokenDidChangeListener:^(FIRAuth *auth, FIRUser *user) {
+    if (user != nil) {
+      [callback call:@[@{ @"success": @NO }] thisObject:self];
+      return;
+    }
+    
+    [callback call:@[@{ @"success": @YES, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+  }];
+}
+
+- (void)removeIDTokenDidChangeListener:(id)unused
+{
+  ENSURE_UI_THREAD(removeAuthStateDidChangeListener, unused);
+  
+  if (_IDTokenListenerHandle == nil) {
+    NSLog(@"[ERROR] Trying to remove an ID-token-listener, but there is no existing one! Call `addIDTokenDidChangeListener` before.");
+  }
+  
+  [[FIRAuth auth] removeAuthStateDidChangeListener:_IDTokenListenerHandle];
+  _IDTokenListenerHandle = nil;
+}
+
+- (void)useAppLanguage:(id)unused
+{
+  [[FIRAuth auth] useAppLanguage];
+}
+
 - (NSDictionary *)currentUser
 {
   return [FirebaseAuthUtilities dictionaryFromUser:[[FIRAuth auth] currentUser]];
@@ -310,11 +432,15 @@
   TiFirebaseAuthProviderType provider = [TiUtils intValue:[arguments objectForKey:@"provider"] def:TiFirebaseAuthProviderTypeUnknown];
   NSString *accessToken = [arguments objectForKey:@"accessToken"];
   NSString *secretToken = [arguments objectForKey:@"secretToken"];
-  
+  NSString *providerID = [arguments objectForKey:@"providerID"];
+  NSString *IDToken = [arguments objectForKey:@"IDToken"];
+
   return [[FirebaseAuthAuthCredentialProxy alloc] _initWithPageContext:self.pageContext
                                                    andAuthProviderType:provider
                                                            accessToken:accessToken
-                                                           secretToken:secretToken];
+                                                           secretToken:secretToken
+                                                            providerID:providerID
+                                                               IDToken:IDToken];
 }
 
 MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_UNKNOWN, TiFirebaseAuthProviderTypeUnknown);
@@ -324,5 +450,6 @@ MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_GOOGLE, TiFirebaseAuthProviderTypeGoogle);
 MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_GITHUB, TiFirebaseAuthProviderTypeGithub);
 MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_PASSWORD, TiFirebaseAuthProviderTypePassword);
 MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_PHONE, TiFirebaseAuthProviderTypePhone);
+MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_OAUTH, TiFirebaseAuthProviderTypeOAuth);
 
 @end
