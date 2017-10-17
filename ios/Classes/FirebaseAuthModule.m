@@ -271,4 +271,12 @@
                                                            secretToken:secretToken];
 }
 
+MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_UNKNOWN, TiFirebaseAuthProviderTypeUnknown);
+MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_FACEBOOK, TiFirebaseAuthProviderTypeFacebook);
+MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_TWITTER, TiFirebaseAuthProviderTypeTwitter);
+MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_GOOGLE, TiFirebaseAuthProviderTypeGoogle);
+MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_GITHUB, TiFirebaseAuthProviderTypeGithub);
+MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_PASSWORD, TiFirebaseAuthProviderTypePassword);
+MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_PHONE, TiFirebaseAuthProviderTypePhone);
+
 @end
