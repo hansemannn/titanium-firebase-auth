@@ -228,8 +228,8 @@
   NSString *email;
   KrollCallback *callback;
 
-  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
   ENSURE_ARG_FOR_KEY(email, arguments, @"email", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
 
   [[FIRAuth auth] sendPasswordResetWithEmail:email
                                   completion:^(NSError *error) {
@@ -240,6 +240,52 @@
                                     
                                     [callback call:@[@{ @"success" : @YES }] thisObject:self];
                                   }];
+}
+
+- (void)confirmPasswordResetWithCode:(id)arguments
+{
+  ENSURE_UI_THREAD(confirmPasswordResetWithCode, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  NSString *code;
+  NSString *newPassword;
+  KrollCallback *callback;
+  
+  ENSURE_ARG_FOR_KEY(code, arguments, @"code", NSString);
+  ENSURE_ARG_FOR_KEY(newPassword, arguments, @"newPassword", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+  
+  [[FIRAuth auth] confirmPasswordResetWithCode:code
+                                   newPassword:newPassword
+                                    completion:^(NSError *error) {
+                                    if (error != nil) {
+                                      [callback call:@[@{ @"success" : @NO }] thisObject:self];
+                                      return;
+                                    }
+                                    
+                                    [callback call:@[@{ @"success" : @YES }] thisObject:self];
+                                  }];
+}
+
+- (void)checkActionCode:(id)arguments
+{
+  ENSURE_UI_THREAD(checkActionCode, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+  
+  NSString *code;
+  KrollCallback *callback;
+  
+  ENSURE_ARG_FOR_KEY(code, arguments, @"code", NSString);
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+  
+  [[FIRAuth auth] checkActionCode:code
+                       completion:^(FIRActionCodeInfo *info, NSError *error) {
+                         if (error != nil) {
+                           [callback call:@[@{ @"success" : @NO }] thisObject:self];
+                           return;
+                         }
+                         [callback call:@[@{ @"success" : @YES, @"operation": NUMINT(info.operation) }] thisObject:self];
+                       }];
 }
 
 - (NSDictionary *)currentUser

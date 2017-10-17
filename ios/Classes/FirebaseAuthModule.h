@@ -28,6 +28,10 @@
 
 - (void)sendPasswordResetWithEmail:(id)arguments;
 
+- (void)confirmPasswordResetWithCode:(id)arguments;
+
+- (void)checkActionCode:(id)arguments;
+
 - (NSDictionary *)currentUser;
 
 - (NSString *)languageCode;
