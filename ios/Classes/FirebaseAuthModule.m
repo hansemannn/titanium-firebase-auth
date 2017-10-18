@@ -2,7 +2,7 @@
  * titanium-firebase-auth
  *
  * Created by Hans Knoechel
- * Copyright (c) 2017 Your Company. All rights reserved.
+ * Copyright (c) 2017 Axway Appcelerator. All rights reserved.
  */
 
 #import "FirebaseAuthModule.h"
@@ -244,7 +244,7 @@
   
   if (actionCodeSettings != nil) {
     [[FIRAuth auth] sendPasswordResetWithEmail:email
-                            actionCodeSettings:[[FIRActionCodeSettings alloc] init]
+                            actionCodeSettings:[FirebaseAuthUtilities actionCodeSettingsFromDictionary:actionCodeSettings]
                                     completion:handler];
     return;
   }

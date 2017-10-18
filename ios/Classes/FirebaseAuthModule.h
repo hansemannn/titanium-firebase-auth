@@ -2,7 +2,7 @@
  * titanium-firebase-auth
  *
  * Created by Hans Knoechel
- * Copyright (c) 2017 Your Company. All rights reserved.
+ * Copyright (c) 2017 Axway Appcelerator. All rights reserved.
  */
 
 #import <FirebaseAuth/FirebaseAuth.h>
