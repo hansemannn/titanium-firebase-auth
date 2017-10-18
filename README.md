@@ -76,7 +76,7 @@ FirebaseAuth.signInWithEmail({
 
 ## Build
 ```js
-cd iphone
+cd ios
 appc ti build -p ios --build-only
 ```
 
