@@ -31,7 +31,6 @@
 		DB5CC2121F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB5CC2101F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h */; };
 		DB5CC2131F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5CC2111F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m */; };
 		DBB9D43C1F9504E7004EA6FA /* FirebaseAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBB9D43B1F9504E3004EA6FA /* FirebaseAuth.framework */; };
-		DBB9D43D1F9504E7004EA6FA /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBB9D43A1F9504E3004EA6FA /* GTMSessionFetcher.framework */; };
 		DBB9D4401F950535004EA6FA /* FirebaseAuthUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = DBB9D43E1F950535004EA6FA /* FirebaseAuthUtilities.h */; };
 		DBB9D4411F950535004EA6FA /* FirebaseAuthUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DBB9D43F1F950535004EA6FA /* FirebaseAuthUtilities.m */; };
 /* End PBXBuildFile section */
@@ -57,7 +56,6 @@
 		D2AAC07E0554694100DB518D /* libfirebase.auth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfirebase.auth.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB5CC2101F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthAuthCredentialProxy.h; path = Classes/FirebaseAuthAuthCredentialProxy.h; sourceTree = "<group>"; };
 		DB5CC2111F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthAuthCredentialProxy.m; path = Classes/FirebaseAuthAuthCredentialProxy.m; sourceTree = "<group>"; };
-		DBB9D43A1F9504E3004EA6FA /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GTMSessionFetcher.framework; path = platform/GTMSessionFetcher.framework; sourceTree = "<group>"; };
 		DBB9D43B1F9504E3004EA6FA /* FirebaseAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAuth.framework; path = platform/FirebaseAuth.framework; sourceTree = "<group>"; };
 		DBB9D43E1F950535004EA6FA /* FirebaseAuthUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthUtilities.h; path = Classes/FirebaseAuthUtilities.h; sourceTree = "<group>"; };
 		DBB9D43F1F950535004EA6FA /* FirebaseAuthUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthUtilities.m; path = Classes/FirebaseAuthUtilities.m; sourceTree = "<group>"; };
@@ -69,7 +67,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBB9D43C1F9504E7004EA6FA /* FirebaseAuth.framework in Frameworks */,
-				DBB9D43D1F9504E7004EA6FA /* GTMSessionFetcher.framework in Frameworks */,
 				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,7 +97,6 @@
 			isa = PBXGroup;
 			children = (
 				DBB9D43B1F9504E3004EA6FA /* FirebaseAuth.framework */,
-				DBB9D43A1F9504E3004EA6FA /* GTMSessionFetcher.framework */,
 				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
 			);
 			name = Frameworks;
