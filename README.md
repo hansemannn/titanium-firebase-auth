@@ -73,7 +73,7 @@ FirebaseAuth.signInWithEmail({
     Ti.API.info('Success!');
     Ti.API.info(e.user);
   }
-  });
+});
 
 // More TBA
 ```
