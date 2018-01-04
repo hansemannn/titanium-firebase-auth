@@ -2,7 +2,16 @@
 Use the native Firebase SDK in Axway Titanium. This repository is part of the [Titanium Firebase](https://github.com/hansemannn/titanium-firebase) project.
 
 ## Requirements
-- [x] Titanium SDK 6.2.0 or later
+- [x] iOS: Titanium SDK 6.2.0+
+- [x] Android: Titanium SDK 7.0.0+
+
+## ⚠️ Android Note
+
+The Android version of this module is currently in development and should not be used in production so far!
+
+## ToDo's
+- Android: Remove `firebase-common-11.0.4.aar` and `play-services-tasks-11.0.4.aar` from the build after building because they are part of `Ti.PlayServices` and `Titanium-Firebase-Core` already and will likely cause duplicate depencency errors!
+- Expose all iOS API's to Android
 
 ## Download
 - [x] [Stable release](https://github.com/hansemannn/titanium-firebase-auth/releases)

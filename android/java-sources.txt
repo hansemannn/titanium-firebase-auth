@@ -1,0 +1,8 @@
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/src/firebase/auth/TitaniumFirebaseAuthModule.java"
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/java/firebase/auth/TitaniumFirebaseAuthBootstrap.java"
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/r/android/support/compat/R.java"
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/r/android/support/design/R.java"
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/r/android/support/v7/appcompat/R.java"
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/r/android/support/v7/cardview/R.java"
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/r/firebase/auth/R.java"
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/r/ti/modules/titanium/ui/R.java"
