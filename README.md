@@ -27,7 +27,7 @@ The Android version of this module is currently in development and should not be
 
 ##### `signInWithEmail(parameters)` (Dictionary)
 
-##### `fetchProviders(parameters)` (Dictionary, iOS-only)
+##### `fetchProviders(parameters)` (Dictionary)
 
 ##### `signInWithCredential(parameters)` (Dictionary, iOS-only)
 

@@ -17,6 +17,8 @@ import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.kroll.common.TiConfig;
 
+import java.util.List;
+
 import android.app.Activity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +30,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.auth.ProviderQueryResult;
 
 @Kroll.module(name = "TitaniumFirebaseAuth", id = "firebase.auth")
 public class TitaniumFirebaseAuthModule extends KrollModule
@@ -48,6 +51,32 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 		mAuth = FirebaseAuth.getInstance();
 
 		super.onStart(activity);
+	}
+
+	@Kroll.method
+	public void fetchProviders(KrollDict params)
+	{
+		String email = (String) params.get("email");
+		final KrollFunction callback = (KrollFunction) params.get("callback");
+
+		mAuth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+			@Override
+			public void onComplete(Task<ProviderQueryResult> task)
+			{
+				KrollDict event = new KrollDict();
+				event.put("success", task.isSuccessful());
+
+				if (task.isSuccessful()) {
+					List<String> providers = task.getResult().getProviders();
+					String[] result = new String[providers.size()];
+					event.put("providers", providers.toArray(result));
+				} else {
+					event.put("code", 0);
+					event.put("description", task.getException().getMessage());
+				}
+				callback.callAsync(getKrollObject(), event);
+			}
+		});
 	}
 
 	@Kroll.method
@@ -109,20 +138,6 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 			});
 	}
 
-	@Kroll.getProperty
-	public KrollDict getCurrentUser()
-	{
-		return dictionaryFromUser(mAuth.getCurrentUser());
-	}
-
-	//  "cannot find symbol"
-	//
-	//  @Kroll.getProperty
-	//  public String getLanguageCode()
-	//  {
-	//    return mAuth.getLanguageCode();
-	//  }
-
 	@Kroll.method
 	public void fetchIDToken(boolean forceRefresh, final KrollFunction callback)
 	{
@@ -149,6 +164,20 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 					callback.callAsync(getKrollObject(), event);
 				}
 			});
+	}
+
+	@Kroll.getProperty
+	public KrollDict getCurrentUser()
+	{
+		return dictionaryFromUser(mAuth.getCurrentUser());
+	}
+
+	@Kroll.getProperty
+	public String getLanguageCode()
+	{
+		// return mAuth.getLanguageCode();
+		// throws "cannot find symbol"
+		return null;
 	}
 
 	private KrollDict dictionaryFromUser(FirebaseUser user)
