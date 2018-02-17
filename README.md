@@ -23,13 +23,13 @@ The Android version of this module is currently in development and should not be
 
 #### Methods (*Arguments TBA*)
 
-##### `fetchProviders(parameters)` (Dictionary, iOS-only)
-
 ##### `createUserWithEmail(parameters)` (Dictionary)
 
-##### `signInWithEmail(parameters)` (Dictionary, iOS-only)
+##### `signInWithEmail(parameters)` (Dictionary)
 
-##### `signInWithCredential(parameters)` (Dictionary)
+##### `fetchProviders(parameters)` (Dictionary, iOS-only)
+
+##### `signInWithCredential(parameters)` (Dictionary, iOS-only)
 
 ##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary, iOS-only)
 
@@ -57,6 +57,8 @@ The Android version of this module is currently in development and should not be
 
 ##### `removeIDTokenDidChangeListener()` (iOS-only)
 
+##### `fetchIDToken(forceRefresh, callback)` (Boolean, Function, Android-only)
+
 #### Properties
 
 ##### `currentUser` (Dictionary, get)
@@ -64,6 +66,8 @@ The Android version of this module is currently in development and should not be
 ##### `languageCode` (String, get, iOS-only)
 
 ##### `apnsToken` (Ti.Blob, get, iOS-only)
+
+- For Android, use `fetchIDToken(forceRefresh, callback)`
 
 ## Example
 ```js
