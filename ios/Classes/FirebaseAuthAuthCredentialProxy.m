@@ -38,7 +38,7 @@
                                                                        verificationCode:secretToken];
       break;
       case TiFirebaseAuthProviderTypeOAuth: {
-        if (IDToken != nil) {
+        if (IDToken == nil) {
           _authCredential = [FIROAuthProvider credentialWithProviderID:providerID accessToken:accessToken];
         } else {
           _authCredential = [FIROAuthProvider credentialWithProviderID:providerID

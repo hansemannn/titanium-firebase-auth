@@ -1,3 +1,4 @@
+"/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/src/firebase/auth/TitaniumFirebaseAuthCredentialProxy.java"
 "/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/src/firebase/auth/TitaniumFirebaseAuthModule.java"
 "/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/java/firebase/auth/TitaniumFirebaseAuthBootstrap.java"
 "/Users/hknoechel/Documents/appcelerator_modules/titanium-firebase/titanium-firebase-auth/android/build/generated/r/android/support/compat/R.java"

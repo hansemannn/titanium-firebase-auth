@@ -31,7 +31,9 @@ The Android version of this module is currently in development and should not be
 
 ##### `signOut(parameters)` (Dictionary)
 
-##### `signInWithCredential(parameters)` (Dictionary, iOS-only)
+##### `signInWithCredential(parameters)` (Dictionary)
+
+##### `createCredential(parameters)` (Dictionary)
 
 ##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary, iOS-only)
 
@@ -68,6 +70,10 @@ The Android version of this module is currently in development and should not be
 ##### `apnsToken` (Ti.Blob, get, iOS-only)
 
 - For Android, use `fetchIDToken(forceRefresh, callback)`
+
+### FirebaseAuth.AuthCredential
+
+Virtual Type to be used in ``signInWithCredential`. Create with `createCredential(parameters)`.
 
 ## Example
 ```js

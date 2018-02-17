@@ -23,7 +23,7 @@
 
 /* Begin PBXBuildFile section */
 		24DD6CF91134B3F500162E58 /* FirebaseAuthModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DD6CF71134B3F500162E58 /* FirebaseAuthModule.h */; };
-		24DD6CFA1134B3F500162E58 /* FirebaseAuthModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6CF81134B3F500162E58 /* FirebaseAuthModule.m */; };
+		24DD6CFA1134B3F500162E58 /* signInWithCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6CF81134B3F500162E58 /* signInWithCredentials.m */; };
 		24DE9E1111C5FE74003F90F6 /* FirebaseAuthModuleAssets.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DE9E0F11C5FE74003F90F6 /* FirebaseAuthModuleAssets.h */; };
 		24DE9E1211C5FE74003F90F6 /* FirebaseAuthModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* FirebaseAuthModuleAssets.m */; };
 		AA747D9F0F9514B9006C5449 /* FirebaseAuth_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* FirebaseAuth_Prefix.pch */; };
@@ -47,7 +47,7 @@
 
 /* Begin PBXFileReference section */
 		24DD6CF71134B3F500162E58 /* FirebaseAuthModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthModule.h; path = Classes/FirebaseAuthModule.h; sourceTree = "<group>"; };
-		24DD6CF81134B3F500162E58 /* FirebaseAuthModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthModule.m; path = Classes/FirebaseAuthModule.m; sourceTree = "<group>"; };
+		24DD6CF81134B3F500162E58 /* signInWithCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = signInWithCredentials.m; path = Classes/signInWithCredentials.m; sourceTree = "<group>"; };
 		24DD6D1B1134B66800162E58 /* titanium.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = titanium.xcconfig; sourceTree = "<group>"; };
 		24DE9E0F11C5FE74003F90F6 /* FirebaseAuthModuleAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthModuleAssets.h; path = Classes/FirebaseAuthModuleAssets.h; sourceTree = "<group>"; };
 		24DE9E1011C5FE74003F90F6 /* FirebaseAuthModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthModuleAssets.m; path = Classes/FirebaseAuthModuleAssets.m; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				24DD6CF71134B3F500162E58 /* FirebaseAuthModule.h */,
-				24DD6CF81134B3F500162E58 /* FirebaseAuthModule.m */,
+				24DD6CF81134B3F500162E58 /* signInWithCredentials.m */,
 			);
 			name = Module;
 			sourceTree = "<group>";
@@ -235,7 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24DD6CFA1134B3F500162E58 /* FirebaseAuthModule.m in Sources */,
+				24DD6CFA1134B3F500162E58 /* signInWithCredentials.m in Sources */,
 				DBB9D4411F950535004EA6FA /* FirebaseAuthUtilities.m in Sources */,
 				DB5CC2131F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m in Sources */,
 				24DE9E1211C5FE74003F90F6 /* FirebaseAuthModuleAssets.m in Sources */,

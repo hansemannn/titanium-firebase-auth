@@ -40,6 +40,30 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 
 	private FirebaseAuth mAuth;
 
+	@Kroll.constant
+	public static final int AUTH_PROVIDER_TYPE_UNKNOWN = 0;
+
+	@Kroll.constant
+	public static final int AUTH_PROVIDER_TYPE_FACEBOOK = 1;
+
+	@Kroll.constant
+	public static final int AUTH_PROVIDER_TYPE_TWITTER = 2;
+
+	@Kroll.constant
+	public static final int AUTH_PROVIDER_TYPE_GOOGLE = 3;
+
+	@Kroll.constant
+	public static final int AUTH_PROVIDER_TYPE_GITHUB = 4;
+
+	@Kroll.constant
+	public static final int AUTH_PROVIDER_TYPE_PASSWORD = 5;
+
+	@Kroll.constant
+	public static final int AUTH_PROVIDER_TYPE_PHONE = 6;
+
+	@Kroll.constant
+	public static final int AUTH_PROVIDER_TYPE_OAUTH = 7;
+
 	public TitaniumFirebaseAuthModule()
 	{
 		super();
@@ -138,10 +162,36 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 			});
 	}
 
-  @Kroll.method
-  public void signOut() {
-    mAuth.signOut();
-  }
+	@Kroll.method
+	public void signInWithCredential(KrollDict params)
+	{
+		TitaniumFirebaseAuthCredentialProxy credential = (TitaniumFirebaseAuthCredentialProxy) params.get("credential");
+		final KrollFunction callback = (KrollFunction) params.get("callback");
+
+		mAuth.signInWithCredential(credential.getCredential())
+			.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+				@Override
+				public void onComplete(Task<AuthResult> task)
+				{
+					KrollDict event = new KrollDict();
+					event.put("success", task.isSuccessful());
+
+					if (task.isSuccessful()) {
+						event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+					} else {
+						event.put("code", 0);
+						event.put("description", task.getException().getMessage());
+					}
+					callback.callAsync(getKrollObject(), event);
+				}
+			});
+	}
+
+	@Kroll.method
+	public void signOut()
+	{
+		mAuth.signOut();
+	}
 
 	@Kroll.method
 	public void fetchIDToken(boolean forceRefresh, final KrollFunction callback)
@@ -169,6 +219,18 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 					callback.callAsync(getKrollObject(), event);
 				}
 			});
+	}
+
+	@Kroll.method
+	public TitaniumFirebaseAuthCredentialProxy createAuthCredential(KrollDict params)
+	{
+		int type = (int) params.get("provider");
+		String accessToken = (String) params.get("accessToken");
+		String secretToken = (String) params.get("secretToken");
+		String providerID = (String) params.get("providerID");
+		String IDToken = (String) params.get("IDToken");
+
+		return new TitaniumFirebaseAuthCredentialProxy(type, accessToken, secretToken, providerID, IDToken);
 	}
 
 	@Kroll.getProperty
