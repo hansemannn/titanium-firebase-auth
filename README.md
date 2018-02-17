@@ -35,9 +35,9 @@ The Android version of this module is currently in development and should not be
 
 ##### `createCredential(parameters)` (Dictionary)
 
-##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary, iOS-only)
+##### `signInAnonymously(parameters)` (Dictionary)
 
-##### `signInAnonymously(parameters)` (Dictionary, iOS-only)
+##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary, iOS-only)
 
 ##### `signInWithCustomToken(parameters)` (Dictionary, iOS-only)
 

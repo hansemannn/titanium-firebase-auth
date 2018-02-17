@@ -188,6 +188,33 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	}
 
 	@Kroll.method
+	public void signInAnonymously(final KrollFunction callback)
+	{
+		mAuth.signInAnonymously()
+			.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+				@Override
+				public void onSuccess(AuthResult authResult)
+				{
+					KrollDict event = new KrollDict();
+					event.put("success", true);
+					event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+					callback.callAsync(getKrollObject(), event);
+				}
+			})
+			.addOnFailureListener(new OnFailureListener() {
+				@Override
+				public void onFailure(Exception exception)
+				{
+					KrollDict event = new KrollDict();
+					event.put("success", false);
+					event.put("code", 0);
+					event.put("description", exception.getMessage());
+					callback.callAsync(getKrollObject(), event);
+				}
+			});
+	}
+
+	@Kroll.method
 	public void signOut()
 	{
 		mAuth.signOut();
