@@ -23,47 +23,47 @@ The Android version of this module is currently in development and should not be
 
 #### Methods (*Arguments TBA*)
 
-##### `fetchProviders(parameters)` (Dictionary)
+##### `fetchProviders(parameters)` (Dictionary, iOS-only)
 
 ##### `createUserWithEmail(parameters)` (Dictionary)
 
-##### `signInWithEmail(parameters)` (Dictionary)
+##### `signInWithEmail(parameters)` (Dictionary, iOS-only)
 
 ##### `signInWithCredential(parameters)` (Dictionary)
 
-##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary)
+##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary, iOS-only)
 
-##### `signInAnonymously(parameters)` (Dictionary)
+##### `signInAnonymously(parameters)` (Dictionary, iOS-only)
 
-##### `signInWithCustomToken(parameters)` (Dictionary)
+##### `signInWithCustomToken(parameters)` (Dictionary, iOS-only)
 
-##### `signOut(parameters)` (Dictionary)
+##### `signOut(parameters)` (Dictionary, iOS-only)
 
-##### `sendPasswordResetWithEmail(parameters)` (Dictionary)
+##### `sendPasswordResetWithEmail(parameters)` (Dictionary, iOS-only)
 
-##### `confirmPasswordResetWithCode(parameters)` (Dictionary)
+##### `confirmPasswordResetWithCode(parameters)` (Dictionary, iOS-only)
 
-##### `checkActionCode(parameters)` (Dictionary)
+##### `checkActionCode(parameters)` (Dictionary, iOS-only)
 
-##### `verifyPasswordResetCode(parameters)` (Dictionary)
+##### `verifyPasswordResetCode(parameters)` (Dictionary, iOS-only)
 
-##### `applyActionCode(parameters)` (Dictionary)
+##### `applyActionCode(parameters)` (Dictionary, iOS-only)
 
-##### `addAuthStateDidChangeListener(callback)` (Function)
+##### `addAuthStateDidChangeListener(callback)` (Function, iOS-only)
 
-##### `removeAuthStateDidChangeListener()`
+##### `removeAuthStateDidChangeListener()`  (iOS-only)
 
-##### `addIDTokenDidChangeListener(callback)` (Function)
+##### `addIDTokenDidChangeListener(callback)` (Function, iOS-only)
 
-##### `removeIDTokenDidChangeListener()`
+##### `removeIDTokenDidChangeListener()` (iOS-only)
 
 #### Properties
 
 ##### `currentUser` (Dictionary, get)
 
-##### `languageCode` (String, get)
+##### `languageCode` (String, get, iOS-only)
 
-##### `apnsToken` (Ti.Blob, get)
+##### `apnsToken` (Ti.Blob, get, iOS-only)
 
 ## Example
 ```js
