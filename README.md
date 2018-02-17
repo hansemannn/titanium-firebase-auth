@@ -23,11 +23,13 @@ The Android version of this module is currently in development and should not be
 
 #### Methods (*Arguments TBA*)
 
+##### `fetchProviders(parameters)` (Dictionary)
+
 ##### `createUserWithEmail(parameters)` (Dictionary)
 
 ##### `signInWithEmail(parameters)` (Dictionary)
 
-##### `fetchProviders(parameters)` (Dictionary)
+##### `signOut(parameters)` (Dictionary)
 
 ##### `signInWithCredential(parameters)` (Dictionary, iOS-only)
 
@@ -36,8 +38,6 @@ The Android version of this module is currently in development and should not be
 ##### `signInAnonymously(parameters)` (Dictionary, iOS-only)
 
 ##### `signInWithCustomToken(parameters)` (Dictionary, iOS-only)
-
-##### `signOut(parameters)` (Dictionary, iOS-only)
 
 ##### `sendPasswordResetWithEmail(parameters)` (Dictionary, iOS-only)
 

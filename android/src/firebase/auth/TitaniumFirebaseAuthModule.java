@@ -138,6 +138,11 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 			});
 	}
 
+  @Kroll.method
+  public void signOut() {
+    mAuth.signOut();
+  }
+
 	@Kroll.method
 	public void fetchIDToken(boolean forceRefresh, final KrollFunction callback)
 	{
