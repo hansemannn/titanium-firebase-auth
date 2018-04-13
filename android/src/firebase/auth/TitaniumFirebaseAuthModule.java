@@ -132,7 +132,7 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	}
 
 	@Kroll.method
-	public void signInUserWithEmail(KrollDict params)
+	public void signInWithEmail(KrollDict params)
 	{
 		String email = (String) params.get("email");
 		String password = (String) params.get("password");
