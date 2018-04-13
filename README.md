@@ -27,7 +27,7 @@ The Android version of this module is currently in development and should not be
 
 ##### `createUserWithEmail(parameters)` (Dictionary)
 
-##### `signInWithEmail(parameters)` (Dictionary)
+##### `signInUserWithEmail(parameters)` (Dictionary)
 
 ##### `signOut(parameters)` (Dictionary)
 
