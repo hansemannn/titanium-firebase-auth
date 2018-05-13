@@ -61,7 +61,7 @@
 
   NSURL *url = [TiUtils toURL:[dictionary objectForKey:@"url"] proxy:nil];
   NSNumber *handleCodeInApp = [dictionary objectForKey:@"handleCodeInApp"];
-  NSString *iOSBundleID = [dictionary objectForKey:@"iOSBundleID"];
+  NSDictionary *ios = [dictionary objectForKey:@"ios"];
   NSDictionary *android = [dictionary objectForKey:@"android"];
 
   if (url != nil) {
@@ -72,14 +72,15 @@
     [actionCodeSettings setHandleCodeInApp:[TiUtils boolValue:handleCodeInApp]];
   }
   
-  if (iOSBundleID != nil) {
+  if (ios != nil) {
+    NSString *iOSBundleID = [ios objectForKey:@"bundleId"];
     [actionCodeSettings setIOSBundleID:iOSBundleID];
   }
   
   if (android != nil) {
-    NSString *packageName = [android objectForKey:@"androidPackageName"];
-    NSString *minimumVersion = [android objectForKey:@"androidMinimumVersion"];
-    NSNumber *installIfNotAvailable = [android objectForKey:@"androidInstallIfNotAvailable"];
+    NSString *packageName = [android objectForKey:@"packageName"];
+    NSString *minimumVersion = [android objectForKey:@"minimumVersion"];
+    NSNumber *installIfNotAvailable = [android objectForKey:@"installIfNotAvailable"];
     
     if (packageName == nil) {
       NSLog(@"[ERROR] Trying to set Android-related action-code-settings without specifying the required \"packageName\" key.");

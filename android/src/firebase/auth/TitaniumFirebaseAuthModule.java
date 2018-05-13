@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -98,6 +99,7 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 					event.put("code", 0);
 					event.put("description", task.getException().getMessage());
 				}
+
 				callback.callAsync(getKrollObject(), event);
 			}
 		});
@@ -215,6 +217,31 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	}
 
 	@Kroll.method
+	public void sendPasswordResetWithEmail(KrollDict params)
+	{
+		String email = (String) params.get("email");
+		KrollDict actionCodeSettings = (KrollDict) params.get("actionCodeSettings");
+		final KrollFunction callback = (KrollFunction) params.get("callback");
+
+		OnCompleteListener<Void> handler = new OnCompleteListener<Void>() {
+			@Override
+			public void onComplete(Task<Void> task)
+			{
+				KrollDict event = new KrollDict();
+				event.put("success", task.isSuccessful());
+				callback.callAsync(getKrollObject(), event);
+			}
+		};
+
+		if (actionCodeSettings == null) {
+			mAuth.sendPasswordResetEmail(email).addOnCompleteListener(handler);
+		} else {
+			mAuth.sendPasswordResetEmail(email, actionCodeSettingsFromDictionary(actionCodeSettings))
+				.addOnCompleteListener(handler);
+		}
+	}
+
+	@Kroll.method
 	public void signOut()
 	{
 		mAuth.signOut();
@@ -272,6 +299,44 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 		// return mAuth.getLanguageCode();
 		// throws "cannot find symbol"
 		return null;
+	}
+
+	private ActionCodeSettings actionCodeSettingsFromDictionary(KrollDict params)
+	{
+		ActionCodeSettings.Builder builder = ActionCodeSettings.newBuilder();
+
+		String url = (String) params.get("url");
+		boolean handleCodeInApp = (boolean) params.optBoolean("handleCodeInApp", false);
+		KrollDict ios = (KrollDict) params.get("ios");
+		KrollDict android = (KrollDict) params.get("android");
+
+		if (url != null) {
+			builder = builder.setUrl(url);
+		}
+
+		builder = builder.setHandleCodeInApp(handleCodeInApp);
+
+		if (ios != null) {
+			if (ios.containsKeyAndNotNull("bundleId")) {
+				builder = builder.setIOSBundleId(ios.getString("bundleId"));
+			}
+		}
+
+		if (android != null) {
+			if (!android.containsKeyAndNotNull("packageName")) {
+				Log.e(
+					LCAT,
+					"Trying to set Android-related action-code-settings without specifying the required \"packageName\" key.");
+			}
+
+			String packageName = android.getString("packageName");
+			String minimumVersion = android.optString("minimumVersion", null);
+			boolean installIfNotAvailable = android.optBoolean("installApp", false);
+
+			builder = builder.setAndroidPackageName(packageName, installIfNotAvailable, minimumVersion);
+		}
+
+		return builder.build();
 	}
 
 	private KrollDict dictionaryFromUser(FirebaseUser user)
