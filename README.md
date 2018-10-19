@@ -94,9 +94,55 @@ FirebaseAuth.signInWithEmail({
     Ti.API.info(e.user);
   }
 });
+// Android only:
+Firbase.createUserWithEmail({
+	email : "my@email.de",
+	password : "88888888"
+	callback : function(e) {
+		if (e.success) {
+			console.log(e.user);
+		} else {
+			console.log(e.description);
+			console.log(e.code);
+		}
+	}
+});
 
-// More TBA
+// Android only:
+FirebaseAuth.User.updateProfile({
+	displayName : "Mustermann",
+	photoUrl : "https://",
+	email : "muster@mann.de",
+	password : "secret"
+});
+// Android only:
+FirebaseAuth.User.onChanged = function(e) {
+	console.log(e);
+}
+// Android only:
+FirebaseAuth.User.addEventListener('changed',function(e){
+});
 ```
+
+### Errorcodes:
+
+- ERROR\_INVALID\_CUSTOM_TOKEN
+- ERROR\_CUSTOM\_TOKEN\_MISMATCH
+- ERROR\_INVALID\_CREDENTIAL
+- ERROR\_INVALID\_EMAIL
+- ERROR\_WRONG\_PASSWORD
+- ERROR\_USER\_MISMATCH
+- ERROR\_REQUIRES\_RECENT\_LOGIN
+- ERROR\_ACCOUNT\_EXISTS\_WITH\_DIFFERENT\_CREDENTIAL
+- ERROR\_EMAIL\_ALREADY\_IN_USE
+- ERROR\_CREDENTIAL\_ALREADY\_IN_USE
+- ERROR\_USER_DISABLED
+- ERROR\_USER\_TOKEN\_EXPIRED
+- ERROR\_USER_NOT\_FOUND
+- ERROR\_INVALID\_USER\_TOKEN
+- ERROR\_OPERATION\_NOT\_ALLOWED
+- ERROR\_WEAK\_PASSWORD
+
 
 ## Build
 ```js
