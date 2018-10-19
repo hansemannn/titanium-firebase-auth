@@ -81,23 +81,11 @@ Virtual Type to be used in ``signInWithCredential`. Create with `createCredentia
 // Require the Firebase Auth module
 var FirebaseAuth = require('firebase.auth');
 
-FirebaseAuth.signInWithEmail({
-  email: 'john@doe.com',
-  password: 't1r0ck$!',
-  callback: function(e) {
-    if (!e.success) {
-      Ti.API.error('Error: ' + e.error);
-      return;
-    }
 
-    Ti.API.info('Success!');
-    Ti.API.info(e.user);
-  }
-});
 // Android only:
 Firbase.createUserWithEmail({
 	email : "my@email.de",
-	password : "88888888"
+	password : "88888888",
 	callback : function(e) {
 		if (e.success) {
 			console.log(e.user);
@@ -107,7 +95,38 @@ Firbase.createUserWithEmail({
 		}
 	}
 });
+```
 
+This will answer with:
+
+```json
+{
+	"uid":"4Lws8bXhrBVYfz4rQK****",
+	"isAnonymous":false,
+	"phoneNumber":null,
+	"providerID":"firebase",
+	"displayName":null,
+	"email":"ras_844862a@ix.de",
+	"isEmailVerified":false
+}
+```
+
+```javascript
+// Android only:
+FirebaseAuth.signInWithEmail({
+  email: 'john@doe.com',
+  password: 't1r0ck$!',
+  callback: function(e) {
+    if (!e.success) {
+      Ti.API.error('Error: ' + e.error);
+      return;
+    }
+  }
+});
+```
+
+
+```javascript
 // Android only:
 FirebaseAuth.User.updateProfile({
 	displayName : "Mustermann",
@@ -119,6 +138,7 @@ FirebaseAuth.User.updateProfile({
 FirebaseAuth.User.onChanged = function(e) {
 	console.log(e);
 }
+
 // Android only:
 FirebaseAuth.User.addEventListener('changed',function(e){
 });

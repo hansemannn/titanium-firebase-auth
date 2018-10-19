@@ -5,6 +5,7 @@ import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
 
+import android.app.Activity;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,21 +18,56 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 @Kroll.module(parentModule = TitaniumFirebaseAuthModule.class)
 public class UserModule extends TitaniumFirebaseAuthModule {
 	
-	private UserModule(FirebaseUser user) {
+	private KrollFunction onChangedCallback; 
+	
+	public UserModule() {
 		super();
-		
 	}
+
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
 
 	}
 
 	@Kroll.method
+	public void verifyEmail(KrollDict opts) {
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+		Activity activity = TiApplication.getInstance().getCurrentActivity();
+		user.sendEmailVerification()
+        .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+			@Override
+			public void onComplete(@NonNull Task<Void> task) {
+				if (task.isSuccessful()) {
+					KrollDict event = new KrollDict();
+					event.put("success", true);
+					event.put("type", "phoneNumber");
+					sendBack(event);
+				}
+			}
+		}).addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				KrollDict event = new KrollDict();
+				event.put("success", false);
+				event.put("type", "phoneNumber");
+				event.put("message", e.getMessage());
+				sendBack(event);
+
+			}
+		}
+        		
+        		
+        		);
+	};
+	
+	
+	@Kroll.method
 	public void updateProfile(KrollDict opts) {
 		String displayName = null;
 		String photoUrl = null;
 		String email = null;
 		String password = null;
+		String phoneNumber = null;
 
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 		if (user == null)
@@ -39,6 +75,9 @@ public class UserModule extends TitaniumFirebaseAuthModule {
 
 		if (opts.containsKeyAndNotNull("displayName")) {
 			displayName = opts.getString("displayName");
+		}
+		if (opts.containsKeyAndNotNull("phoneNumber")) {
+			phoneNumber = opts.getString("phoneNumber");
 		}
 		if (opts.containsKeyAndNotNull("photoUrl")) {
 			photoUrl = opts.getString("photoUrl");
@@ -48,6 +87,12 @@ public class UserModule extends TitaniumFirebaseAuthModule {
 		}
 		if (opts.containsKeyAndNotNull("password")) {
 			password = opts.getString("password");
+		}
+		if (opts.containsKeyAndNotNull("callback")) {
+			onChangedCallback = (KrollFunction)opts.get("callback");
+		}
+		if (opts.containsKeyAndNotNull("onchanged")) {
+			onChangedCallback = (KrollFunction)opts.get("onchanged");
 		}
 		if (displayName != null || photoUrl != null) {
 			UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
@@ -62,6 +107,7 @@ public class UserModule extends TitaniumFirebaseAuthModule {
 						public void onComplete(@NonNull Task<Void> task) {
 							if (task.isSuccessful()) {
 								KrollDict event = new KrollDict();
+								event.put("type", "profile");
 								event.put("success", true);
 								sendBack(event);
 							}
@@ -72,12 +118,16 @@ public class UserModule extends TitaniumFirebaseAuthModule {
 
 							KrollDict event = new KrollDict();
 							event.put("success", false);
-							event.put("types", "profile");
+							event.put("type", "profile");
+							event.put("message", e.getMessage());
 							sendBack(event);
 
 						}
 					});
 
+		}
+		if (phoneNumber != null) {
+			// TODO
 		}
 		if (email != null) {
 			user.updateEmail(email)
@@ -87,16 +137,18 @@ public class UserModule extends TitaniumFirebaseAuthModule {
 							if (task.isSuccessful()) {
 								KrollDict event = new KrollDict();
 								event.put("success", true);
+								event.put("type", "email");
 								sendBack(event);
 							}
 						}
 					}).addOnFailureListener(new OnFailureListener() {
 						@Override
 						public void onFailure(@NonNull Exception e) {
-
 							KrollDict event = new KrollDict();
 							event.put("success", false);
-							event.put("types", "email");
+							event.put("type", "email");
+							event.put("message", e.getMessage());
+							
 							sendBack(event);
 
 						}
@@ -109,8 +161,9 @@ public class UserModule extends TitaniumFirebaseAuthModule {
 						public void onComplete(@NonNull Task<Void> task) {
 							if (task.isSuccessful()) {
 								KrollDict event = new KrollDict();
+								event.put("type", "password");
 								event.put("success", true);
-								event.put("types", "password");
+								event.put("type", "password");
 
 								sendBack(event);
 							}
@@ -119,7 +172,9 @@ public class UserModule extends TitaniumFirebaseAuthModule {
 						@Override
 						public void onFailure(@NonNull Exception e) {
 							KrollDict event = new KrollDict();
+							event.put("type", "password");
 							event.put("success", false);
+							event.put("message", e.getMessage());
 							sendBack(event);
 
 						}
@@ -153,12 +208,18 @@ public class UserModule extends TitaniumFirebaseAuthModule {
 	}
 
 	private void sendBack(KrollDict event) {
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+		if (user!=null)
+			event.put("user",dictionaryFromUser(user) );
 		KrollFunction onChanged = (KrollFunction) getProperty("onChanged");
 		if (onChanged != null) {
 			onChanged.call(getKrollObject(), new Object[] { event });
 		}
-		if (this.hasListeners("changed")) {
-			this.fireEvent("changed", event);
+		if (onChangedCallback != null) {
+			onChangedCallback.call(getKrollObject(), new Object[] { event });
 		}
+		//if (this.hasListeners("changed") && user!=null) {
+		//	this.fireEvent("changed", event);
+		//}
 	}
 }

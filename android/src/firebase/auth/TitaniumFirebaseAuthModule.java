@@ -84,9 +84,14 @@ public class TitaniumFirebaseAuthModule extends KrollModule {
 							String[] result = new String[providers.size()];
 							event.put("providers", providers.toArray(result));
 						} else {
-							event.put("code", 0);
-							event.put("description", task.getException()
-									.getMessage());
+							event.put("code",
+									((FirebaseAuthException) task
+											.getException())
+											.getErrorCode());
+							event.put("description",
+									((FirebaseAuthException) task
+											.getException())
+											.getMessage());
 						}
 						callback.callAsync(getKrollObject(), event);
 					}
@@ -114,12 +119,14 @@ public class TitaniumFirebaseAuthModule extends KrollModule {
 											.dictionaryFromUser(mAuth
 													.getCurrentUser()));
 								} else {
-									
-									String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-									String description = ((FirebaseAuthException) task.getException()).getMessage();
-									
-									event.put("code", errorCode);
-									event.put("description", description);
+									event.put("code",
+											((FirebaseAuthException) task
+													.getException())
+													.getErrorCode());
+									event.put("description",
+											((FirebaseAuthException) task
+													.getException())
+													.getMessage());
 								}
 								callback.callAsync(getKrollObject(), event);
 							}
@@ -171,9 +178,15 @@ public class TitaniumFirebaseAuthModule extends KrollModule {
 							event.put("user", UserModule
 									.dictionaryFromUser(mAuth.getCurrentUser()));
 						} else {
-							event.put("code", 0);
-							event.put("description", task.getException()
-									.getMessage());
+							event.put("code",
+									((FirebaseAuthException) task
+											.getException())
+											.getErrorCode());
+							event.put("description",
+									((FirebaseAuthException) task
+											.getException())
+											.getMessage());
+							
 						}
 						callback.callAsync(getKrollObject(), event);
 					}
