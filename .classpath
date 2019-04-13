@@ -16,7 +16,8 @@
 	<classpathentry kind="lib" path="/Users/ravindra/Documents/github/titanium-firebase-auth/android/lib/firebase-auth-interop-16.0.1.aar"/>
 	<classpathentry kind="lib" path="/Users/ravindra/Documents/github/titanium-firebase-auth/android/build/intermediates/exploded-aar/firebase-auth-16.2.1/classes.jar"/>
 	<classpathentry kind="lib" path="/Users/ravindra/Documents/github/titanium-firebase-auth/android/build/intermediates/exploded-aar/firebase-auth-interop-16.0.1/classes.jar"/>
-	<classpathentry kind="lib" path="/Users/ravindra/Documents/github/titanium-firebase-auth/android/build/intermediates/exploded-aar/firebase-common-16.1.0/classes.jar"/>
 	<classpathentry kind="lib" path="/Users/ravindra/Documents/github/titanium-firebase-auth/android/build/intermediates/exploded-aar/play-services-tasks-16.0.1/classes.jar"/>
+	<classpathentry kind="lib" path="/Users/ravindra/Documents/github/titanium-firebase-auth/android/build/intermediates/exploded-aar/firebase-common-16.1.0/classes.jar"/>
+	<classpathentry kind="lib" path="/Users/ravindra/Documents/github/titanium-firebase-auth/android/lib/firebase-common-16.1.0.aar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
