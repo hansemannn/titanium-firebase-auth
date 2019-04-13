@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:module xmlns:ti="http://ti.appcelerator.org" xmlns:android="http://schemas.android.com/apk/res/android">
-	<?xml version="1.0" encoding="UTF-8"?>
-	<ti:module xmlns:ti="http://ti.appcelerator.org" xmlns:android="http://schemas.android.com/apk/res/android">
 		<modules>
 			<!-- Require Firebase Core (https://github.com/hansemannn/titanium-firebase-core) -->
 			<module>firebase.core</module>
@@ -9,5 +7,4 @@
 			<!-- Require Ti.PlayServices (https://github.com/appcelerator-modules/ti.playservices) -->
 			<module platform="android">ti.playservices</module>
 		</modules>
-	</ti:module>
 </ti:module>

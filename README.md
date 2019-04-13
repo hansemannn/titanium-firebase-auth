@@ -38,9 +38,9 @@ The Android version of this module is currently in development and should not be
 
 ##### `signInAnonymously(parameters)` (Dictionary)
 
-##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary, iOS-only)
+##### `signInWithCustomToken(parameters)` 
 
-##### `signInWithCustomToken(parameters)` (Dictionary, iOS-only)
+##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary, iOS-only)
 
 ##### `sendPasswordResetWithEmail(parameters)` (Dictionary, iOS-only)
 
