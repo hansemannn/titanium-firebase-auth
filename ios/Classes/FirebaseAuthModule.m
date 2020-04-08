@@ -2,7 +2,7 @@
  * titanium-firebase-auth
  *
  * Created by Hans Knoechel
- * Copyright (c) 2017 Axway Appcelerator. All rights reserved.
+ * Copyright (c) 2017-present Hans Knöchel. All rights reserved.
  */
 
 #import "FirebaseAuthModule.h"
@@ -10,6 +10,7 @@
 #import "FirebaseAuthAuthCredentialProxy.h"
 #import "TiBase.h"
 #import "TiHost.h"
+#import "TiBlob.h"
 #import "TiUtils.h"
 
 @implementation FirebaseAuthModule
@@ -47,15 +48,15 @@
   ENSURE_ARG_FOR_KEY(email, arguments, @"email", NSString);
   ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
 
-  [[FIRAuth auth] fetchProvidersForEmail:email
-                              completion:^(NSArray<NSString *> *providers, NSError *error) {
-                                if (error != nil) {
-                                  [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
-                                  return;
-                                }
+  [[FIRAuth auth] fetchSignInMethodsForEmail:email
+                                  completion:^(NSArray<NSString *> * _Nullable providers, NSError * _Nullable error) {
+    if (error != nil) {
+      [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+      return;
+    }
 
-                                [callback call:@[@{ @"success": @YES, @"providers": providers ?: @[] }] thisObject:self];
-                              }];
+    [callback call:@[@{ @"success": @(YES), @"providers": providers ?: @[] }] thisObject:self];
+  }];
 }
 
 - (void)createUserWithEmail:(id)arguments
@@ -73,13 +74,16 @@
 
   [[FIRAuth auth] createUserWithEmail:email
                              password:password
-                           completion:^(FIRUser *_Nullable user, NSError *_Nullable error) {
+                           completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
                              if (error != nil) {
                                [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
                                return;
                              }
                              
-                             [callback call:@[@{ @"success": @TRUE, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+                             [callback call:@[@{
+                                                @"success": @(YES),
+                                                @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user]
+                             }] thisObject:self];
                            }];
 }
 
@@ -98,13 +102,13 @@
 
   [[FIRAuth auth] signInWithEmail:email
                          password:password
-                       completion:^(FIRUser *user, NSError *error) {
+                       completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
                          if (error != nil) {
                            [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
                            return;
                          }
                          
-                         [callback call:@[@{ @"success": @TRUE, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+                         [callback call:@[@{ @"success": @(YES), @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user] }] thisObject:self];
                        }];
 }
 
@@ -120,13 +124,13 @@
   ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
   
   [[FIRAuth auth] signInWithCredential:[credential authCredential]
-                            completion:^(FIRUser *user, NSError *error) {
+                            completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
                               if (error != nil) {
                                 [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
                                 return;
                               }
                               
-                              [callback call:@[@{ @"success": @TRUE, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+                              [callback call:@[@{ @"success": @(YES), @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user] }] thisObject:self];
                             }];
 }
 
@@ -150,7 +154,7 @@
                                              }
                               
                                              [callback call:@[@{
-                                               @"success": @TRUE,
+                                               @"success": @(YES),
                                                @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user],
                                                @"additionalUserInfo": [FirebaseAuthUtilities dictionaryFromAdditionalUserInfo:authResult.additionalUserInfo]
                                              }] thisObject:self];
@@ -162,13 +166,13 @@
   ENSURE_UI_THREAD(signInAnonymously, callback);
   ENSURE_SINGLE_ARG(callback, KrollCallback);
   
-  [[FIRAuth auth] signInAnonymouslyWithCompletion:^(FIRUser *user, NSError *error) {
+  [[FIRAuth auth] signInAnonymouslyWithCompletion:^(FIRAuthDataResult *_Nullable authResult, NSError *error) {
     if (error != nil) {
       [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
       return;
     }
     
-    [callback call:@[@{ @"success": @TRUE, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+    [callback call:@[@{ @"success": @(YES), @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user] }] thisObject:self];
   }];
 }
 
@@ -185,15 +189,15 @@
   ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
   
   [[FIRAuth auth] signInWithCustomToken:token
-                             completion:^(FIRUser *user, NSError *error) {
+                             completion:^(FIRAuthDataResult *_Nullable authResult, NSError *error) {
                                              if (error != nil) {
                                                [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
                                                return;
                                              }
                                              
                                              [callback call:@[@{
-                                               @"success": @TRUE,
-                                               @"user": [FirebaseAuthUtilities dictionaryFromUser:user],
+                                               @"success": @(YES),
+                                               @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user],
                                              }] thisObject:self];
                                            }];
 }
@@ -239,7 +243,7 @@
       return;
     }
     
-    [callback call:@[@{ @"success" : @YES }] thisObject:self];
+    [callback call:@[@{ @"success" : @(YES) }] thisObject:self];
   };
   
   if (actionCodeSettings != nil) {
@@ -274,7 +278,7 @@
                                       return;
                                     }
                                     
-                                    [callback call:@[@{ @"success" : @YES }] thisObject:self];
+                                    [callback call:@[@{ @"success" : @(YES) }] thisObject:self];
                                   }];
 }
 
@@ -295,7 +299,7 @@
                            [callback call:@[@{ @"success" : @NO }] thisObject:self];
                            return;
                          }
-                         [callback call:@[@{ @"success" : @YES, @"operation": NUMINT(info.operation) }] thisObject:self];
+                         [callback call:@[@{ @"success" : @(YES), @"operation": @(info.operation) }] thisObject:self];
                        }];
 }
 
@@ -317,7 +321,7 @@
                                    return;
                                  }
                                  
-                                 [callback call:@[@{ @"success" : @YES, @"email": email }] thisObject:self];
+                                 [callback call:@[@{ @"success" : @(YES), @"email": email }] thisObject:self];
                                }];
 }
 
@@ -339,7 +343,7 @@
                            return;
                          }
                          
-                         [callback call:@[@{ @"success" : @YES }] thisObject:self];
+                         [callback call:@[@{ @"success" : @(YES) }] thisObject:self];
                        }];
 }
 
@@ -358,7 +362,7 @@
       return;
     }
     
-    [callback call:@[@{ @"success": @YES, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+    [callback call:@[@{ @"success": @(YES), @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
   }];
 }
 
@@ -389,7 +393,7 @@
       return;
     }
     
-    [callback call:@[@{ @"success": @YES, @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
+    [callback call:@[@{ @"success": @(YES), @"user": [FirebaseAuthUtilities dictionaryFromUser:user] }] thisObject:self];
   }];
 }
 
@@ -422,7 +426,7 @@
 
 - (TiBlob *)apnsToken
 {
-  return [[TiBlob alloc] _initWithPageContext:self.pageContext andData:[[FIRAuth auth] APNSToken] mimetype:@"text/plain"];
+  return [[TiBlob alloc] initWithData:[[FIRAuth auth] APNSToken] mimetype:@"text/plain"];
 }
 
 - (FirebaseAuthAuthCredentialProxy *)createAuthCredential:(id)arguments
@@ -453,3 +457,4 @@ MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_PHONE, TiFirebaseAuthProviderTypePhone);
 MAKE_SYSTEM_PROP(AUTH_PROVIDER_TYPE_OAUTH, TiFirebaseAuthProviderTypeOAuth);
 
 @end
+
