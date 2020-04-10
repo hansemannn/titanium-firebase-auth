@@ -47,6 +47,8 @@
 
 - (void)removeIDTokenDidChangeListener:(id)unused;
 
+- (void)fetchIDToken:(id)callback;
+
 - (NSDictionary *)currentUser;
 
 - (NSString *)languageCode;

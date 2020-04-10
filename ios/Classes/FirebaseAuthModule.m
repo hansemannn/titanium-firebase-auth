@@ -72,19 +72,21 @@
   ENSURE_ARG_FOR_KEY(password, arguments, @"password", NSString);
   ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
 
-  [[FIRAuth auth] createUserWithEmail:email
-                             password:password
-                           completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
-                             if (error != nil) {
-                               [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
-                               return;
-                             }
-                             
-                             [callback call:@[@{
-                                                @"success": @(YES),
-                                                @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user]
-                             }] thisObject:self];
-                           }];
+  [[FIRAuth auth] createUserWithEmail:email password:password completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
+    if (error != nil) {
+     [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+     return;
+    }
+
+    [authResult.user getIDTokenWithCompletion:^(NSString * _Nullable token, NSError * _Nullable error) {
+      [callback call:@[@{
+        @"success": @(YES),
+        @"token": NULL_IF_NIL(token),
+        @"refreshToken": NULL_IF_NIL(authResult.user.refreshToken),
+        @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user]
+      }] thisObject:self];
+    }];
+  }];
 }
 
 - (void)signInWithEmail:(id)arguments
@@ -100,16 +102,21 @@
   ENSURE_ARG_FOR_KEY(password, arguments, @"password", NSString);
   ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
 
-  [[FIRAuth auth] signInWithEmail:email
-                         password:password
-                       completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
-                         if (error != nil) {
-                           [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
-                           return;
-                         }
-                         
-                         [callback call:@[@{ @"success": @(YES), @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user] }] thisObject:self];
-                       }];
+  [[FIRAuth auth] signInWithEmail:email password:password completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
+    if (error != nil) {
+      [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+      return;
+    }
+
+    [authResult.user getIDTokenWithCompletion:^(NSString * _Nullable token, NSError * _Nullable error) {
+      [callback call:@[@{
+        @"success": @(YES),
+        @"token": NULL_IF_NIL(token),
+        @"refreshToken": NULL_IF_NIL(authResult.user.refreshToken),
+        @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user]
+      }] thisObject:self];
+    }];
+  }];
 }
 
 - (void)signInWithCredential:(id)arguments
@@ -427,6 +434,30 @@
 - (TiBlob *)apnsToken
 {
   return [[TiBlob alloc] initWithData:[[FIRAuth auth] APNSToken] mimetype:@"text/plain"];
+}
+
+- (void)fetchIDToken:(id)args
+{
+  ENSURE_ARG_COUNT(args, 2);
+  
+  BOOL forceRefresh = [TiUtils boolValue:args[0]];
+  KrollCallback *callback = args[1];
+
+  FIRUser *currentUser = [[FIRAuth auth] currentUser];
+
+  if (currentUser == nil) {
+    [callback call:@[@{ @"success": @(NO) }] thisObject:self];
+    return;
+  }
+
+  [currentUser getIDTokenForcingRefresh:forceRefresh completion:^(NSString * _Nullable token, NSError * _Nullable error) {
+    if (token == nil) {
+      [callback call:@[@{ @"success": @(NO) }] thisObject:self];
+      return;
+    }
+
+    [callback call:@[@{ @"success": @(YES), @"token": token, @"refreshToken": NULL_IF_NIL(currentUser.refreshToken) }] thisObject:self];
+  }];
 }
 
 - (FirebaseAuthAuthCredentialProxy *)createAuthCredential:(id)arguments
