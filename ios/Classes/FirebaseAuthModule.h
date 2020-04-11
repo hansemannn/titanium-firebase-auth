@@ -29,6 +29,8 @@
 
 - (void)signOut:(id)arguments;
 
+- (void)deleteUser:(id)callback;
+
 - (void)sendPasswordResetWithEmail:(id)arguments;
 
 - (void)confirmPasswordResetWithCode:(id)arguments;

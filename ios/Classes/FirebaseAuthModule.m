@@ -152,20 +152,18 @@
   ENSURE_ARG_FOR_KEY(credential, arguments, @"credential", FirebaseAuthAuthCredentialProxy);
   ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
   
-  [[FIRAuth auth] signInAndRetrieveDataWithCredential:[credential authCredential]
-                                           completion:^(FIRAuthDataResult *_Nullable authResult,
-                                                        NSError *_Nullable error) {
-                                             if (error != nil) {
-                                               [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
-                                               return;
-                                             }
-                              
-                                             [callback call:@[@{
-                                               @"success": @(YES),
-                                               @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user],
-                                               @"additionalUserInfo": [FirebaseAuthUtilities dictionaryFromAdditionalUserInfo:authResult.additionalUserInfo]
-                                             }] thisObject:self];
-                            }];
+  [[FIRAuth auth] signInWithCredential:credential.authCredential completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
+   if (error != nil) {
+     [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+     return;
+   }
+
+   [callback call:@[@{
+     @"success": @(YES),
+     @"user": [FirebaseAuthUtilities dictionaryFromUser:authResult.user],
+     @"additionalUserInfo": [FirebaseAuthUtilities dictionaryFromAdditionalUserInfo:authResult.additionalUserInfo]
+   }] thisObject:self];
+  }];
 }
 
 - (void)signInAnonymously:(id)callback
@@ -224,9 +222,23 @@
   if (success && !authError) {
     // Sign-out succeeded
     [callback call:@[@{ @"success": NUMINT(YES) }] thisObject:self];
+    return;
   }
   
   [callback call:@[ [FirebaseAuthUtilities dictionaryFromError:authError] ] thisObject:self];
+}
+
+- (void)deleteUser:(id)callback
+{
+  ENSURE_SINGLE_ARG(callback, KrollCallback);
+
+  [[[FIRAuth auth] currentUser] deleteWithCompletion:^(NSError * _Nullable error) {
+    if (error != nil) {
+      [callback call:@[@{ @"success": @(NO), @"error": error.localizedDescription }] thisObject:self];
+      return;
+    }
+    [callback call:@[@{ @"success": @(YES) }] thisObject:self];
+    }];
 }
 
 - (void)sendPasswordResetWithEmail:(id)arguments

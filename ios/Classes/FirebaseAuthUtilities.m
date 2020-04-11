@@ -38,7 +38,7 @@
   return @{
     @"success": @NO,
     @"code" : NUMINTEGER([error code]),
-    @"description" : [error localizedDescription]
+    @"description" : NULL_IF_NIL([error localizedDescription])
   };
 }
 
