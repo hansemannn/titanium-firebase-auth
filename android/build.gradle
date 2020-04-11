@@ -1,0 +1,10 @@
+
+repositories {
+	google()
+}
+
+
+dependencies {
+	implementation 'com.google.firebase:firebase-auth:19.3.0'
+	implementation 'com.google.firebase:firebase-auth-interop:19.0.0'
+}
