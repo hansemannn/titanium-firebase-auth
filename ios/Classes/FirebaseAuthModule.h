@@ -2,7 +2,7 @@
  * titanium-firebase-auth
  *
  * Created by Hans Knoechel
- * Copyright (c) 2017 Axway Appcelerator. All rights reserved.
+ * Copyright (c) 2017-present Hans Knöchel. All rights reserved.
  */
 
 #import <FirebaseAuth/FirebaseAuth.h>
@@ -29,6 +29,8 @@
 
 - (void)signOut:(id)arguments;
 
+- (void)deleteUser:(id)callback;
+
 - (void)sendPasswordResetWithEmail:(id)arguments;
 
 - (void)confirmPasswordResetWithCode:(id)arguments;
@@ -46,6 +48,8 @@
 - (void)addIDTokenDidChangeListener:(id)callback;
 
 - (void)removeIDTokenDidChangeListener:(id)unused;
+
+- (void)fetchIDToken:(id)callback;
 
 - (NSDictionary *)currentUser;
 
