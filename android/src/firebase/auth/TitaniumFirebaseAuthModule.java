@@ -8,36 +8,32 @@
  */
 package firebase.auth;
 
-import org.appcelerator.kroll.KrollModule;
-import org.appcelerator.kroll.KrollDict;
-import org.appcelerator.kroll.KrollFunction;
-import org.appcelerator.kroll.annotations.Kroll;
-
-import org.appcelerator.titanium.TiApplication;
-import org.appcelerator.kroll.common.Log;
-import org.appcelerator.kroll.common.TiConfig;
-
-import java.util.List;
-
 import android.app.Activity;
+import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
-import com.google.firebase.auth.ProviderQueryResult;
+import com.google.firebase.auth.SignInMethodQueryResult;
+import java.util.List;
+import org.appcelerator.kroll.KrollDict;
+import org.appcelerator.kroll.KrollFunction;
+import org.appcelerator.kroll.KrollModule;
+import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.TiConfig;
+import org.appcelerator.titanium.TiApplication;
 
 @Kroll.module(name = "TitaniumFirebaseAuth", id = "firebase.auth")
 public class TitaniumFirebaseAuthModule extends KrollModule
 {
-	private static final String LCAT = "TitaniumFirebaseAuthModule";
-	private static final boolean DBG = TiConfig.LOGD;
-
 	private FirebaseAuth mAuth;
 
 	@Kroll.constant
@@ -70,11 +66,21 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	}
 
 	@Override
-	public void onStart(Activity activity)
+	protected void initActivity(Activity activity)
 	{
 		mAuth = FirebaseAuth.getInstance();
+	}
 
+	@Override
+	public void onStart(Activity activity)
+	{
 		super.onStart(activity);
+	}
+
+	@Kroll.method
+	public void init()
+	{
+		mAuth = FirebaseAuth.getInstance();
 	}
 
 	@Kroll.method
@@ -83,21 +89,43 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 		String email = (String) params.get("email");
 		final KrollFunction callback = (KrollFunction) params.get("callback");
 
-		mAuth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+		Task<SignInMethodQueryResult> result = mAuth.fetchSignInMethodsForEmail(email);
+
+		result.addOnSuccessListener(new OnSuccessListener<SignInMethodQueryResult>() {
 			@Override
-			public void onComplete(Task<ProviderQueryResult> task)
+			public void onSuccess(SignInMethodQueryResult arg0)
+			{
+
+				List<String> providers = arg0.getSignInMethods();
+				String[] result = new String[providers.size()];
+
+				KrollDict event = new KrollDict();
+				event.put("success", true);
+				event.put("providers", providers.toArray(result));
+				callback.callAsync(getKrollObject(), event);
+			}
+		});
+
+		result.addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(Exception arg0)
 			{
 				KrollDict event = new KrollDict();
-				event.put("success", task.isSuccessful());
+				event.put("success", false);
+				event.put("code", 0);
+				event.put("description", arg0.getMessage());
+				callback.callAsync(getKrollObject(), event);
+			}
+		});
 
-				if (task.isSuccessful()) {
-					List<String> providers = task.getResult().getProviders();
-					String[] result = new String[providers.size()];
-					event.put("providers", providers.toArray(result));
-				} else {
-					event.put("code", 0);
-					event.put("description", task.getException().getMessage());
-				}
+		result.addOnCanceledListener(new OnCanceledListener() {
+			@Override
+			public void onCanceled()
+			{
+				KrollDict event = new KrollDict();
+				event.put("success", false);
+				event.put("code", 0);
+				event.put("description", "cancelled");
 				callback.callAsync(getKrollObject(), event);
 			}
 		});
@@ -113,41 +141,33 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 		Activity activity = TiApplication.getInstance().getCurrentActivity();
 
 		mAuth.createUserWithEmailAndPassword(email, password)
-			.addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-				@Override
-				public void onComplete(Task<AuthResult> task)
-				{
-					final KrollDict event = new KrollDict();
+			.addOnCompleteListener(activity, task -> {
+				final KrollDict event = new KrollDict();
 
-					if (!task.isSuccessful()) {
-						event.put("success", false);
-						event.put("code", 0);
-						event.put("description", task.getException().getMessage());
-						callback.callAsync(getKrollObject(), event);
-						return;
-					}
-
-					mAuth.getCurrentUser().getIdToken(false).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-						@Override
-						public void onSuccess(GetTokenResult result) {
-							event.put("success", true);
-							event.put("token", result.getToken());
-							event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
-	
-							callback.callAsync(getKrollObject(), event);
-						}
-					}).addOnFailureListener(new OnFailureListener() {
-						@Override
-						public void onFailure(Exception exception) {
-							event.put("success", false);
-							event.put("code", 0);
-							event.put("description", exception.getMessage());
-
-							callback.callAsync(getKrollObject(), event);
-						}
-					});
-
+				if (!task.isSuccessful()) {
+					event.put("success", false);
+					event.put("code", 0);
+					event.put("description", task.getException().getMessage());
+					callback.callAsync(getKrollObject(), event);
+					return;
 				}
+
+				mAuth.getCurrentUser().getIdToken(false).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+					@Override
+					public void onSuccess(GetTokenResult result) {
+						event.put("success", true);
+						event.put("token", result.getToken());
+						event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+
+						callback.callAsync(getKrollObject(), event);
+					}
+				}).addOnFailureListener(exception -> {
+					event.put("success", false);
+					event.put("code", 0);
+					event.put("description", exception.getMessage());
+
+					callback.callAsync(getKrollObject(), event);
+				});
 			});
 	}
 
@@ -159,46 +179,32 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 		final KrollFunction callback = (KrollFunction) params.get("callback");
 
 		mAuth.signInWithEmailAndPassword(email, password)
-			.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-				@Override
-				public void onSuccess(AuthResult authResult)
-				{
-					mAuth.getCurrentUser()
-						.getIdToken(false)
-						.addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-							@Override
-							public void onSuccess(GetTokenResult result)
-							{
-								KrollDict event = new KrollDict();
-								event.put("success", true);
-								event.put("token", result.getToken());
-								event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
-								callback.callAsync(getKrollObject(), event);
-							}
-						})
-						.addOnFailureListener(new OnFailureListener() {
-							@Override
-							public void onFailure(Exception exception)
-							{
-								KrollDict event = new KrollDict();
-								event.put("success", false);
-								event.put("code", 0);
-								event.put("description", exception.getMessage());
-								callback.callAsync(getKrollObject(), event);
-							}
-						});
-				}
-			})
-			.addOnFailureListener(new OnFailureListener() {
-				@Override
-				public void onFailure(Exception exception)
-				{
+			.addOnSuccessListener(authResult -> mAuth.getCurrentUser()
+				.getIdToken(false)
+				.addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+					@Override
+					public void onSuccess(GetTokenResult result)
+					{
+						KrollDict event = new KrollDict();
+						event.put("success", true);
+						event.put("token", result.getToken());
+						event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+						callback.callAsync(getKrollObject(), event);
+					}
+				})
+				.addOnFailureListener(exception -> {
 					KrollDict event = new KrollDict();
 					event.put("success", false);
 					event.put("code", 0);
 					event.put("description", exception.getMessage());
 					callback.callAsync(getKrollObject(), event);
-				}
+				}))
+			.addOnFailureListener(exception -> {
+				KrollDict event = new KrollDict();
+				event.put("success", false);
+				event.put("code", 0);
+				event.put("description", exception.getMessage());
+				callback.callAsync(getKrollObject(), event);
 			});
 	}
 
@@ -207,7 +213,7 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	{
 		String email = (String) params.get("email");
 		final KrollFunction callback = (KrollFunction) params.get("callback");
-	
+
 		mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(Task<Void> task) {
@@ -225,21 +231,17 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 		final KrollFunction callback = (KrollFunction) params.get("callback");
 
 		mAuth.signInWithCredential(credential.getCredential())
-			.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-				@Override
-				public void onComplete(Task<AuthResult> task)
-				{
-					KrollDict event = new KrollDict();
-					event.put("success", task.isSuccessful());
+			.addOnCompleteListener(task -> {
+				KrollDict event = new KrollDict();
+				event.put("success", task.isSuccessful());
 
-					if (task.isSuccessful()) {
-						event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
-					} else {
-						event.put("code", 0);
-						event.put("description", task.getException().getMessage());
-					}
-					callback.callAsync(getKrollObject(), event);
+				if (task.isSuccessful()) {
+					event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+				} else {
+					event.put("code", 0);
+					event.put("description", task.getException().getMessage());
 				}
+				callback.callAsync(getKrollObject(), event);
 			});
 	}
 
@@ -247,61 +249,96 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	public void signInAnonymously(final KrollFunction callback)
 	{
 		mAuth.signInAnonymously()
-			.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-				@Override
-				public void onSuccess(AuthResult authResult)
-				{
-					KrollDict event = new KrollDict();
-					event.put("success", true);
-					event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
-					callback.callAsync(getKrollObject(), event);
-				}
+			.addOnSuccessListener(authResult -> {
+				KrollDict event = new KrollDict();
+				event.put("success", true);
+				event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+				callback.callAsync(getKrollObject(), event);
 			})
-			.addOnFailureListener(new OnFailureListener() {
-				@Override
-				public void onFailure(Exception exception)
-				{
-					KrollDict event = new KrollDict();
-					event.put("success", false);
-					event.put("code", 0);
-					event.put("description", exception.getMessage());
-					callback.callAsync(getKrollObject(), event);
-				}
+			.addOnFailureListener(exception -> {
+				KrollDict event = new KrollDict();
+				event.put("success", false);
+				event.put("code", 0);
+				event.put("description", exception.getMessage());
+				callback.callAsync(getKrollObject(), event);
 			});
 	}
 
 	@Kroll.method
-	public void signOut()
+	public void signInWithCustomToken(KrollDict params)
+	{
+
+		final String mCustomToken = (String) params.get("customToken");
+		final KrollFunction callback = (KrollFunction) params.get("callback");
+
+		Activity activity = TiApplication.getInstance().getCurrentActivity();
+
+		Task<AuthResult> result = mAuth.signInWithCustomToken(mCustomToken);
+
+		result.addOnCompleteListener(activity, task -> {
+
+			if (task.isSuccessful()) {
+				KrollDict event = new KrollDict();
+				event.put("success", task.isSuccessful());
+				event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+				callback.callAsync(getKrollObject(), event);
+			} else {
+				KrollDict event = new KrollDict();
+				event.put("success", task.isSuccessful());
+				event.put("description", task.getException().getMessage());
+				callback.callAsync(getKrollObject(), event);
+			}
+		});
+	}
+
+	@Kroll.method
+	public void signOut(@Nullable KrollFunction callback)
 	{
 		mAuth.signOut();
+
+		// For parity with iOS, use callback if available
+		if (callback != null) {
+			KrollDict event = new KrollDict();
+			event.put("success", true);
+			callback.callAsync(getKrollObject(), event);
+		}
+	}
+
+	@Kroll.method
+	public void deleteUser(KrollFunction callback) {
+		mAuth.getCurrentUser().delete().addOnCompleteListener(task -> {
+			KrollDict event = new KrollDict();
+			event.put("success", task.isSuccessful());
+			callback.callAsync(getKrollObject(), event);
+		});
 	}
 
 	@Kroll.method
 	public void fetchIDToken(boolean forceRefresh, final KrollFunction callback)
 	{
+		if (mAuth.getCurrentUser() != null) {
 		mAuth.getCurrentUser()
 			.getIdToken(forceRefresh)
-			.addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-				@Override
-				public void onSuccess(GetTokenResult result)
-				{
-					KrollDict event = new KrollDict();
-					event.put("success", true);
-					event.put("token", result.getToken());
-					callback.callAsync(getKrollObject(), event);
-				}
+			.addOnSuccessListener(result -> {
+				KrollDict event = new KrollDict();
+				event.put("success", true);
+				event.put("token", result.getToken());
+				callback.callAsync(getKrollObject(), event);
 			})
-			.addOnFailureListener(new OnFailureListener() {
-				@Override
-				public void onFailure(Exception exception)
-				{
-					KrollDict event = new KrollDict();
-					event.put("success", false);
-					event.put("code", 0);
-					event.put("description", exception.getMessage());
-					callback.callAsync(getKrollObject(), event);
-				}
+			.addOnFailureListener(exception -> {
+				KrollDict event = new KrollDict();
+				event.put("success", false);
+				event.put("code", 0);
+				event.put("description", exception.getMessage());
+				callback.callAsync(getKrollObject(), event);
 			});
+		} else {
+			KrollDict event = new KrollDict();
+			event.put("success", false);
+			event.put("code", 0);
+			event.put("description", "No user");
+			callback.callAsync(getKrollObject(), event);
+		}
 	}
 
 	@Kroll.method
@@ -325,9 +362,7 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	@Kroll.getProperty
 	public String getLanguageCode()
 	{
-		// return mAuth.getLanguageCode();
-		// throws "cannot find symbol"
-		return null;
+		return mAuth.getLanguageCode();
 	}
 
 	private KrollDict dictionaryFromUser(FirebaseUser user)
@@ -341,7 +376,7 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 		result.put("phoneNumber", user.getPhoneNumber());
 		result.put("providerID", user.getProviderId());
 		result.put("uid", user.getUid());
-		result.put("photoURL", user.getPhotoUrl().toString());
+		result.put("photoURL", user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null);
 		result.put("displayName", user.getDisplayName());
 
 		return result;
