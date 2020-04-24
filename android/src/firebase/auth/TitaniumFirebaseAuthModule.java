@@ -283,29 +283,37 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	@Kroll.method
 	public void fetchIDToken(boolean forceRefresh, final KrollFunction callback)
 	{
-		mAuth.getCurrentUser()
-			.getIdToken(forceRefresh)
-			.addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-				@Override
-				public void onSuccess(GetTokenResult result)
-				{
-					KrollDict event = new KrollDict();
-					event.put("success", true);
-					event.put("token", result.getToken());
-					callback.callAsync(getKrollObject(), event);
-				}
-			})
-			.addOnFailureListener(new OnFailureListener() {
-				@Override
-				public void onFailure(Exception exception)
-				{
-					KrollDict event = new KrollDict();
-					event.put("success", false);
-					event.put("code", 0);
-					event.put("description", exception.getMessage());
-					callback.callAsync(getKrollObject(), event);
-				}
-			});
+		if (mAuth.getCurrentUser() != null) {
+			mAuth.getCurrentUser()
+				.getIdToken(forceRefresh)
+				.addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+					@Override
+					public void onSuccess(GetTokenResult result)
+					{
+						KrollDict event = new KrollDict();
+						event.put("success", true);
+						event.put("token", result.getToken());
+						callback.callAsync(getKrollObject(), event);
+					}
+				})
+				.addOnFailureListener(new OnFailureListener() {
+					@Override
+					public void onFailure(Exception exception)
+					{
+						KrollDict event = new KrollDict();
+						event.put("success", false);
+						event.put("code", 0);
+						event.put("description", exception.getMessage());
+						callback.callAsync(getKrollObject(), event);
+					}
+				});
+		} else {
+			KrollDict event = new KrollDict();
+			event.put("success", false);
+			event.put("code", 1);
+			event.put("description", "No user");
+			callback.callAsync(getKrollObject(), event);
+		}
 	}
 
 	@Kroll.method
