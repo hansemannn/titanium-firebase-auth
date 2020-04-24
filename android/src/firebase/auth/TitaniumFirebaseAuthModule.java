@@ -213,7 +213,7 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	{
 		String email = (String) params.get("email");
 		final KrollFunction callback = (KrollFunction) params.get("callback");
-	
+
 		mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(Task<Void> task) {
@@ -316,6 +316,7 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 	@Kroll.method
 	public void fetchIDToken(boolean forceRefresh, final KrollFunction callback)
 	{
+		if (mAuth.getCurrentUser() != null) {
 		mAuth.getCurrentUser()
 			.getIdToken(forceRefresh)
 			.addOnSuccessListener(result -> {
@@ -331,6 +332,13 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 				event.put("description", exception.getMessage());
 				callback.callAsync(getKrollObject(), event);
 			});
+		} else {
+			KrollDict event = new KrollDict();
+			event.put("success", false);
+			event.put("code", 0);
+			event.put("description", "No user");
+			callback.callAsync(getKrollObject(), event);
+		}
 	}
 
 	@Kroll.method
