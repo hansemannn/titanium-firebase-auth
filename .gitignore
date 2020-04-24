@@ -18,7 +18,7 @@ xcuserdata
 *.xcuserstate
 *.xcuserdata*
 
- .classpath 
+ .classpath
 .idea/
 libs/
 
@@ -27,6 +27,9 @@ android/ant_clean
 android/.classpath
 android/.settings
 android/dist/
+android/java-sources.txt
+android/gradlew
+android/gradlew.bat
 android/launch-*
 nbproject
 /metadata.json
