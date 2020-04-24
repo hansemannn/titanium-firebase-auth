@@ -18,6 +18,7 @@ xcuserdata
 *.xcuserstate
 *.xcuserdata*
 
+ .classpath 
 .idea/
 libs/
 
