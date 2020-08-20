@@ -207,17 +207,15 @@
                                            }];
 }
 
-- (void)signOut:(id)arguments
+- (void)signOut:(id)callback
 {
-  ENSURE_UI_THREAD(signOut, arguments);
-  ENSURE_SINGLE_ARG(arguments, NSDictionary);
-
-  KrollCallback *callback;
-
-  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
-
+  ENSURE_UI_THREAD(signOut, callback);
+  ENSURE_SINGLE_ARG_OR_NIL(callback, KrollCallback);
+  
   NSError *authError;
   BOOL success = [[FIRAuth auth] signOut:&authError]; //Note: odd signOut seems to always return true!?
+
+  if (callback == nil) { return; }
 
   if (success && !authError) {
     // Sign-out succeeded
@@ -231,6 +229,11 @@
 - (void)deleteUser:(id)callback
 {
   ENSURE_SINGLE_ARG(callback, KrollCallback);
+
+  if ([[FIRAuth auth] currentUser] == nil) {
+    [callback call:@[@{ @"success": @(NO), @"error": @"No such user" }] thisObject:self];
+    return;
+  }
 
   [[[FIRAuth auth] currentUser] deleteWithCompletion:^(NSError * _Nullable error) {
     if (error != nil) {
