@@ -306,6 +306,13 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 
 	@Kroll.method
 	public void deleteUser(KrollFunction callback) {
+		if (mAuth.getCurrentUser() == null) {
+			KrollDict event = new KrollDict();
+			event.put("success", false);
+			callback.callAsync(getKrollObject(), event);
+			return;
+		}
+
 		mAuth.getCurrentUser().delete().addOnCompleteListener(task -> {
 			KrollDict event = new KrollDict();
 			event.put("success", task.isSuccessful());
