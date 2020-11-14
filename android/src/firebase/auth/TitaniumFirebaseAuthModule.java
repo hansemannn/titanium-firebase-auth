@@ -9,6 +9,7 @@
 package firebase.auth;
 
 import android.app.Activity;
+import android.drm.DrmStore;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.ActionCodeResult;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -222,6 +224,27 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 				callback.callAsync(getKrollObject(), event);
             }
         });
+	}
+
+	@Kroll.method
+	public void checkActionCode(KrollDict params)
+	{
+		String code = (String) params.get("code");
+		final KrollFunction callback = (KrollFunction) params.get("callback");
+
+		mAuth.checkActionCode(code).addOnCompleteListener(new OnCompleteListener<ActionCodeResult>() {
+			@Override
+			public void onComplete(Task<ActionCodeResult> task) {
+				KrollDict event = new KrollDict();
+				if (task.isSuccessful()) {
+					event.put("success", task.isSuccessful());
+					event.put("operation", task.getResult().getOperation());
+				} else {
+					event.put("success", false);
+				}
+				callback.callAsync(getKrollObject(), event);
+			}
+		});
 	}
 
 	@Kroll.method
