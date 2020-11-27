@@ -44,7 +44,7 @@ public class TitaniumFirebaseAuthCredentialProxy extends KrollProxy
 				mAuthCredential = TwitterAuthProvider.getCredential(accessToken, secretToken);
 				break;
 			case TitaniumFirebaseAuthModule.AUTH_PROVIDER_TYPE_GOOGLE:
-				mAuthCredential = GoogleAuthProvider.getCredential(accessToken, secretToken);
+				mAuthCredential = GoogleAuthProvider.getCredential(IDToken, accessToken);
 				break;
 			case TitaniumFirebaseAuthModule.AUTH_PROVIDER_TYPE_GITHUB:
 				mAuthCredential = GithubAuthProvider.getCredential(accessToken);

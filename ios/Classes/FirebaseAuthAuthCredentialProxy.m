@@ -25,7 +25,7 @@
         _authCredential = [FIRTwitterAuthProvider credentialWithToken:accessToken secret:secretToken];
       break;
       case TiFirebaseAuthProviderTypeGoogle:
-        _authCredential = [FIRGoogleAuthProvider credentialWithIDToken:accessToken accessToken:secretToken];
+        _authCredential = [FIRGoogleAuthProvider credentialWithIDToken:IDToken accessToken:accessToken];
       break;
       case TiFirebaseAuthProviderTypeGithub:
         _authCredential = [FIRGitHubAuthProvider credentialWithToken:accessToken];
