@@ -43,11 +43,11 @@ thank you!
 
 ##### `signInAndRetrieveDataWithCredential(parameters)` (Dictionary, iOS-only)
 
-##### `sendPasswordResetWithEmail(parameters)` (Dictionary, iOS-only)
+##### `sendPasswordResetWithEmail(parameters)` (Dictionary)
 
 ##### `confirmPasswordResetWithCode(parameters)` (Dictionary, iOS-only)
 
-##### `checkActionCode(parameters)` (Dictionary, iOS-only)
+##### `checkActionCode(parameters)` (Dictionary)
 
 ##### `verifyPasswordResetCode(parameters)` (Dictionary, iOS-only)
 
@@ -67,7 +67,7 @@ thank you!
 
 ##### `currentUser` (Dictionary, get)
 
-##### `languageCode` (String, get, iOS-only)
+##### `languageCode` (String, get)
 
 ##### `apnsToken` (Ti.Blob, get, iOS-only)
 
@@ -75,24 +75,43 @@ thank you!
 
 ### FirebaseAuth.AuthCredential
 
-Virtual Type to be used in ``signInWithCredential`. Create with `createCredential(parameters)`.
+Virtual Type to be used in `signInWithCredential`. Create with `createCredential(parameters)`.
 
 ## Example
 ```js
 // Require the Firebase Auth module
 var FirebaseAuth = require('firebase.auth');
 
+
+// Sign-up
+FirebaseAuth.createUserWithEmail({
+	email: 'john@doe.com',
+	password: 't1r0ck$!',
+	callback: function(e) {
+		if (!e.success) {
+			Ti.API.error('Create: error: ' + JSON.stringify(e));
+			return;
+		}
+
+		Ti.API.info('Create: success!');
+		Ti.API.info(JSON.stringify(e.user));
+	}
+});
+
+
+// Login
 FirebaseAuth.signInWithEmail({
   email: 'john@doe.com',
   password: 't1r0ck$!',
   callback: function(e) {
     if (!e.success) {
-      Ti.API.error('Error: ' + e.error);
+      Ti.API.error('Error: ' + JSON.stringify(e));
       return;
     }
 
     Ti.API.info('Success!');
-    Ti.API.info(e.user);
+    Ti.API.info(JSON.stringify(e.user));	// e.g.  {"uid":"...","photoURL":null,"phoneNumber":null,"email":"...","providerID":"...","displayName":null}
+
   }
 });
 
