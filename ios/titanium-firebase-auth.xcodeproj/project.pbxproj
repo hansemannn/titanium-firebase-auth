@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -26,11 +26,11 @@
 		24DD6CFA1134B3F500162E58 /* FirebaseAuthModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6CF81134B3F500162E58 /* FirebaseAuthModule.m */; };
 		24DE9E1111C5FE74003F90F6 /* FirebaseAuthModuleAssets.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DE9E0F11C5FE74003F90F6 /* FirebaseAuthModuleAssets.h */; };
 		24DE9E1211C5FE74003F90F6 /* FirebaseAuthModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* FirebaseAuthModuleAssets.m */; };
+		3A3049252645C1AE00D55944 /* FirebaseAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */; };
+		3A3049262645C1AE00D55944 /* GTMSessionFetcher.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */; };
 		AA747D9F0F9514B9006C5449 /* FirebaseAuth_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* FirebaseAuth_Prefix.pch */; };
-		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 		DB5CC2121F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB5CC2101F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h */; };
 		DB5CC2131F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5CC2111F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m */; };
-		DBB9D43C1F9504E7004EA6FA /* FirebaseAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBB9D43B1F9504E3004EA6FA /* FirebaseAuth.framework */; };
 		DBB9D4401F950535004EA6FA /* FirebaseAuthUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = DBB9D43E1F950535004EA6FA /* FirebaseAuthUtilities.h */; };
 		DBB9D4411F950535004EA6FA /* FirebaseAuthUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DBB9D43F1F950535004EA6FA /* FirebaseAuthUtilities.m */; };
 /* End PBXBuildFile section */
@@ -51,12 +51,12 @@
 		24DD6D1B1134B66800162E58 /* titanium.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = titanium.xcconfig; sourceTree = "<group>"; };
 		24DE9E0F11C5FE74003F90F6 /* FirebaseAuthModuleAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthModuleAssets.h; path = Classes/FirebaseAuthModuleAssets.h; sourceTree = "<group>"; };
 		24DE9E1011C5FE74003F90F6 /* FirebaseAuthModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthModuleAssets.m; path = Classes/FirebaseAuthModuleAssets.m; sourceTree = "<group>"; };
+		3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FirebaseAuth.xcframework; path = platform/FirebaseAuth.xcframework; sourceTree = "<group>"; };
+		3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GTMSessionFetcher.xcframework; path = platform/GTMSessionFetcher.xcframework; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* FirebaseAuth_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirebaseAuth_Prefix.pch; sourceTree = SOURCE_ROOT; };
-		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libfirebase.auth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfirebase.auth.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB5CC2101F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthAuthCredentialProxy.h; path = Classes/FirebaseAuthAuthCredentialProxy.h; sourceTree = "<group>"; };
 		DB5CC2111F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthAuthCredentialProxy.m; path = Classes/FirebaseAuthAuthCredentialProxy.m; sourceTree = "<group>"; };
-		DBB9D43B1F9504E3004EA6FA /* FirebaseAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAuth.framework; path = platform/FirebaseAuth.framework; sourceTree = "<group>"; };
 		DBB9D43E1F950535004EA6FA /* FirebaseAuthUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthUtilities.h; path = Classes/FirebaseAuthUtilities.h; sourceTree = "<group>"; };
 		DBB9D43F1F950535004EA6FA /* FirebaseAuthUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthUtilities.m; path = Classes/FirebaseAuthUtilities.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -66,8 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DBB9D43C1F9504E7004EA6FA /* FirebaseAuth.framework in Frameworks */,
-				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
+				3A3049252645C1AE00D55944 /* FirebaseAuth.xcframework in Frameworks */,
+				3A3049262645C1AE00D55944 /* GTMSessionFetcher.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,8 +96,8 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DBB9D43B1F9504E3004EA6FA /* FirebaseAuth.framework */,
-				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
+				3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */,
+				3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -191,7 +191,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "titanium-firebase-auth" */;
 			compatibilityVersion = "Xcode 8.0";
@@ -282,7 +282,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = (
 					"-DDEBUG",
@@ -326,7 +326,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-DTI_POST_1_2";
 				OTHER_LDFLAGS = "-ObjC";
@@ -356,6 +356,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -386,6 +387,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-DDEBUG",
@@ -420,6 +422,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -447,7 +450,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DTI_POST_1_2";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = firebase.auth;
