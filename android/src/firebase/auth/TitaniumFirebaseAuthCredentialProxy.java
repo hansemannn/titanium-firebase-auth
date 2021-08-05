@@ -54,7 +54,7 @@ public class TitaniumFirebaseAuthCredentialProxy extends KrollProxy
 				mAuthCredential = PhoneAuthProvider.getCredential(accessToken, secretToken);
 				break;
 			case TitaniumFirebaseAuthModule.AUTH_PROVIDER_TYPE_OAUTH: {
-				mAuthCredential = OAuthProvider.getCredential(IDToken, accessToken, secretToken);
+				mAuthCredential = OAuthProvider.newCredentialBuilder(providerID).setAccessToken(accessToken).setIdToken(IDToken).build();
 			} break;
 			default:
 				Log.e(TAG, "Unknown auth-provider-type provided: " + provider);
