@@ -8,9 +8,9 @@ this project maintained and be able to use the latest Firebase SDK's, please see
 thank you!
 
 ## Requirements
-- [x] The [Firebase Core](https://github.com/hansemannn/titanium-firebase-core) module
+- [x] The [Firebase Core](https://github.com/hansemannn/titanium-firebase-core) module (iOS only)
 - [x] iOS: Titanium SDK 6.3.0+
-- [x] Android: Titanium SDK 7.0.0+ / Titanium SDK 9.0.0+ for Version 3.0.0+
+- [x] Android: Titanium SDK 9.0.0+ for Version 3.0.0+
 
 ## ToDo's
 - Expose all iOS API's to Android
@@ -114,8 +114,6 @@ FirebaseAuth.signInWithEmail({
 
   }
 });
-
-// More TBA
 ```
 
 ## Build
