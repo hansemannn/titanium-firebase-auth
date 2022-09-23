@@ -9,11 +9,8 @@ thank you!
 
 ## Requirements
 - [x] The [Firebase Core](https://github.com/hansemannn/titanium-firebase-core) module (iOS only)
-- [x] iOS: Titanium SDK 6.3.0+
-- [x] Android: Titanium SDK 9.0.0+ for Version 3.0.0+
-
-## ToDo's
-- Expose all iOS API's to Android
+- [x] iOS: Titanium SDK 10.0.0+
+- [x] Android: Titanium SDK 9.0.0+
 
 ## Download
 - [x] [Stable release](https://github.com/hansemannn/titanium-firebase-auth/releases)
