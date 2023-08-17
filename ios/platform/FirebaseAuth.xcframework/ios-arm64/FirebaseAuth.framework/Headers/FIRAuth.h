@@ -194,7 +194,7 @@ typedef NS_ENUM(NSInteger, FIRActionCodeOperation) {
   /** Action code for email link operation. */
   FIRActionCodeOperationEmailLink = 4,
 
-  /** Action code for verifing and changing email */
+  /** Action code for verifying and changing email */
   FIRActionCodeOperationVerifyAndChangeEmail = 5,
 
   /** Action code for reverting second factor addition */
@@ -849,6 +849,14 @@ NS_SWIFT_NAME(Auth)
         for phone number auth to work.
  */
 - (BOOL)canHandleNotification:(NSDictionary *)userInfo API_UNAVAILABLE(macos, tvos, watchos);
+
+/** @fn revokeTokenWithAuthorizationCode:Completion
+    @brief Revoke the users token with authorization code.
+    @param completion (Optional) the block invoked when the request to revoke the token is
+        complete, or fails. Invoked asynchronously on the main thread in the future.
+ */
+- (void)revokeTokenWithAuthorizationCode:(NSString *)authorizationCode
+                              completion:(nullable void (^)(NSError *_Nullable error))completion;
 
 #pragma mark - User sharing
 

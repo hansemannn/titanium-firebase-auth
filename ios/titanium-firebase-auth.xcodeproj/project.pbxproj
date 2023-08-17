@@ -3,23 +3,8 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 53;
 	objects = {
-
-/* Begin PBXAggregateTarget section */
-		24416B8111C4CA220047AFDD /* Build & Test */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 24416B8A11C4CA520047AFDD /* Build configuration list for PBXAggregateTarget "Build & Test" */;
-			buildPhases = (
-				24416B8011C4CA220047AFDD /* ShellScript */,
-			);
-			dependencies = (
-				24416B8511C4CA280047AFDD /* PBXTargetDependency */,
-			);
-			name = "Build & Test";
-			productName = "Build & test";
-		};
-/* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
 		24DD6CF91134B3F500162E58 /* FirebaseAuthModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DD6CF71134B3F500162E58 /* FirebaseAuthModule.h */; };
@@ -28,22 +13,13 @@
 		24DE9E1211C5FE74003F90F6 /* FirebaseAuthModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* FirebaseAuthModuleAssets.m */; };
 		3A3049252645C1AE00D55944 /* FirebaseAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */; };
 		3A3049262645C1AE00D55944 /* GTMSessionFetcher.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */; };
+		3AB0887E2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AB0887D2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework */; };
 		AA747D9F0F9514B9006C5449 /* FirebaseAuth_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* FirebaseAuth_Prefix.pch */; };
 		DB5CC2121F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB5CC2101F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h */; };
 		DB5CC2131F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5CC2111F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.m */; };
 		DBB9D4401F950535004EA6FA /* FirebaseAuthUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = DBB9D43E1F950535004EA6FA /* FirebaseAuthUtilities.h */; };
 		DBB9D4411F950535004EA6FA /* FirebaseAuthUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DBB9D43F1F950535004EA6FA /* FirebaseAuthUtilities.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		24416B8411C4CA280047AFDD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = "titanium-firebase-auth";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		24DD6CF71134B3F500162E58 /* FirebaseAuthModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthModule.h; path = Classes/FirebaseAuthModule.h; sourceTree = "<group>"; };
@@ -53,6 +29,7 @@
 		24DE9E1011C5FE74003F90F6 /* FirebaseAuthModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthModuleAssets.m; path = Classes/FirebaseAuthModuleAssets.m; sourceTree = "<group>"; };
 		3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FirebaseAuth.xcframework; path = platform/FirebaseAuth.xcframework; sourceTree = "<group>"; };
 		3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GTMSessionFetcher.xcframework; path = platform/GTMSessionFetcher.xcframework; sourceTree = "<group>"; };
+		3AB0887D2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FirebaseAppCheckInterop.xcframework; path = platform/FirebaseAppCheckInterop.xcframework; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* FirebaseAuth_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirebaseAuth_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		D2AAC07E0554694100DB518D /* libfirebase.auth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfirebase.auth.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB5CC2101F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FirebaseAuthAuthCredentialProxy.h; path = Classes/FirebaseAuthAuthCredentialProxy.h; sourceTree = "<group>"; };
@@ -68,6 +45,7 @@
 			files = (
 				3A3049252645C1AE00D55944 /* FirebaseAuth.xcframework in Frameworks */,
 				3A3049262645C1AE00D55944 /* GTMSessionFetcher.xcframework in Frameworks */,
+				3AB0887E2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */,
+				3AB0887D2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework */,
 				3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */,
 			);
 			name = Frameworks;
@@ -191,7 +170,8 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1320;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "titanium-firebase-auth" */;
 			compatibilityVersion = "Xcode 8.0";
@@ -207,26 +187,9 @@
 			projectRoot = "";
 			targets = (
 				D2AAC07D0554694100DB518D /* titanium-firebase-auth */,
-				24416B8111C4CA220047AFDD /* Build & Test */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		24416B8011C4CA220047AFDD /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# shell script goes here\n\npython \"${TITANIUM_SDK}/titanium.py\" run --dir=\"${PROJECT_DIR}\"\nexit $?\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D2AAC07B0554694100DB518D /* Sources */ = {
@@ -241,14 +204,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		24416B8511C4CA280047AFDD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC07D0554694100DB518D /* titanium-firebase-auth */;
-			targetProxy = 24416B8411C4CA280047AFDD /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB921F08733DC00010E9CD /* Debug */ = {
@@ -457,30 +412,6 @@
 			};
 			name = Release;
 		};
-		24416B8211C4CA220047AFDD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 24DD6D1B1134B66800162E58 /* titanium.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = "Build & test";
-			};
-			name = Debug;
-		};
-		24416B8311C4CA220047AFDD /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 24DD6D1B1134B66800162E58 /* titanium.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				PRODUCT_NAME = "Build & test";
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -498,15 +429,6 @@
 			buildConfigurations = (
 				1DEB922308733DC00010E9CD /* Debug */,
 				1DEB922408733DC00010E9CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		24416B8A11C4CA520047AFDD /* Build configuration list for PBXAggregateTarget "Build & Test" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				24416B8211C4CA220047AFDD /* Debug */,
-				24416B8311C4CA220047AFDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
