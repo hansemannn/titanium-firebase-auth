@@ -28,6 +28,8 @@ thank you!
 
 ##### `signInWithEmail(parameters)` (Dictionary)
 
+##### `signInWithGoogle({idToken[string], success[function], error[function]})` (Android-only)
+
 ##### `signOut(parameters)` (Dictionary)
 
 ##### `signInWithCredential(parameters)` (Dictionary)
@@ -111,6 +113,37 @@ FirebaseAuth.signInWithEmail({
 
   }
 });
+```
+
+## Sign-in with Google (Android only)
+
+You can use this module in combination with [titanium-google-signin](https://github.com/hansemannn/titanium-google-signin). Implement the `signIn()` methods from `titanium-google-signin` and use the returned `user.authentication.idToken` to call FirebaseAuth.signInWithGoogle({idToken}). An example code would look like this:
+
+```js
+import GoogleSignIn from 'ti.googlesignin';
+import FirebaseAuth from 'firebase.auth';
+
+GoogleSignIn.initialize({
+	clientID: 'your-client-id',
+});
+
+GoogleSignIn.signIn();
+
+GoogleSignIn.addEventListener("login", function(opt) {
+	let idToken = opt.user.authentication.idToken;
+	if (idToken != "" && idToken != undefined) {
+		FirebaseAuth.signInWithGoogle({
+			idToken: idToken,
+			success: function(e) {
+				alert('Logged in!');
+			},
+			error: function(e) {
+				Ti.API.error('Error logging in: ' + e.error);
+			}
+		})
+	}
+})
+
 ```
 
 ## Build
