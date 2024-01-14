@@ -228,7 +228,11 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 						if (task.isSuccessful()) {
 							// Sign in success, update UI with the signed-in user's information
 							FirebaseUser user = mAuth.getCurrentUser();
-							dictionaryFromUser(user);
+
+							KrollDict event = new KrollDict();
+							event.put("success", true);
+							event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+							callback.callAsync(getKrollObject(), event);
 						} else {
 							// If sign in fails, display a message to the user.
 							KrollDict event = new KrollDict();
