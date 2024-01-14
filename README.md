@@ -134,11 +134,12 @@ GoogleSignIn.addEventListener("login", function(opt) {
 	if (idToken != "" && idToken != undefined) {
 		FirebaseAuth.signInWithGoogle({
 			idToken: idToken,
-			success: function(e) {
-				alert('Logged in!');
-			},
-			error: function(e) {
+			callback: function(e) {
+				if (e.success) {
+					alert('Logged in!');
+				} else {
 				Ti.API.error('Error logging in: ' + e.error);
+				}
 			}
 		})
 	}
