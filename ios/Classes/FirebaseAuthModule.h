@@ -51,6 +51,8 @@
 
 - (void)fetchIDToken:(id)callback;
 
+- (void)sendVerificationEmail:(id)arguments;
+
 - (NSDictionary *)currentUser;
 
 - (NSString *)languageCode;
