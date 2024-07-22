@@ -166,6 +166,35 @@
   }];
 }
 
+- (void)sendVerificationEmail:(id)arguments
+{
+  ENSURE_UI_THREAD(sendVerificationEmail, arguments);
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+
+  KrollCallback *callback;
+  ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
+
+  FIRAuth *auth = [FIRAuth auth];
+  if (auth.currentUser)
+  {
+    [auth.currentUser sendEmailVerificationWithCompletion:^(NSError *_Nullable error) {
+      if (error != nil) {
+        [callback call:@[[FirebaseAuthUtilities dictionaryFromError:error]] thisObject:self];
+        return;
+      }
+
+      [callback call:@[@{ @"success": @(YES) }] thisObject:self];
+    }];
+  }
+  else
+  {
+    NSDictionary *errorResponse = @{@"code": @(17011), @"message": @"No user is signed in."};
+    [callback call:@[errorResponse] thisObject:self];
+  }
+}
+
+
+
 - (void)signInAnonymously:(id)callback
 {
   ENSURE_UI_THREAD(signInAnonymously, callback);
