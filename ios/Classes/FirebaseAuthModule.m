@@ -175,7 +175,7 @@
   ENSURE_ARG_FOR_KEY(callback, arguments, @"callback", KrollCallback);
 
   FIRAuth *auth = [FIRAuth auth];
-  if (auth.currentUser)
+  if (auth.currentUser != nil)
   {
     [auth.currentUser sendEmailVerificationWithCompletion:^(NSError *_Nullable error) {
       if (error != nil) {
