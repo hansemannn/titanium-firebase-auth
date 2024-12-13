@@ -9,8 +9,6 @@
 package firebase.auth;
 
 import android.app.Activity;
-import android.drm.DrmStore;
-import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -20,17 +18,20 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.ActionCodeResult;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import java.util.List;
+
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.kroll.common.TiConfig;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 
 @Kroll.module(name = "TitaniumFirebaseAuth", id = "firebase.auth")
@@ -208,6 +209,41 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 				event.put("description", exception.getMessage());
 				callback.callAsync(getKrollObject(), event);
 			});
+	}
+
+	@Kroll.method
+	public void signInWithGoogle(KrollDict params)
+	{
+		String idToken = params.getString("idToken");
+		final KrollFunction callback = (KrollFunction) params.get("callback");
+		if (idToken.equals("")) {
+			Log.e("Firebase Auth", "idToken is empty");
+			return;
+		}
+		AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
+		mAuth.signInWithCredential(firebaseCredential)
+				.addOnCompleteListener(TiApplication.getAppCurrentActivity(), new OnCompleteListener<AuthResult>() {
+					@Override
+					public void onComplete(@NonNull Task<AuthResult> task) {
+						if (task.isSuccessful()) {
+							// Sign in success, update UI with the signed-in user's information
+							FirebaseUser user = mAuth.getCurrentUser();
+
+							KrollDict event = new KrollDict();
+							event.put("success", true);
+							event.put("user", dictionaryFromUser(mAuth.getCurrentUser()));
+							callback.callAsync(getKrollObject(), event);
+						} else {
+							// If sign in fails, display a message to the user.
+							KrollDict event = new KrollDict();
+							event.put("success", false);
+							event.put("code", 0);
+							event.put("description", task.getException().getMessage());
+							callback.callAsync(getKrollObject(), event);
+						}
+					}
+				});
+
 	}
 
 	@Kroll.method
