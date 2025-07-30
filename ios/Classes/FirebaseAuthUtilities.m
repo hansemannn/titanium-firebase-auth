@@ -21,6 +21,7 @@
 
   return @{
     @"email" : NULL_IF_NIL([user email]),
+    @"emailVerified" : NUMBOOL(user.emailVerified),
     @"phoneNumber" : NULL_IF_NIL([user phoneNumber]),
     @"providerID" : [user providerID],
     @"uid" : [user uid],
