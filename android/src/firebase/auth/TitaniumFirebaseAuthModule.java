@@ -439,6 +439,7 @@ public class TitaniumFirebaseAuthModule extends KrollModule
 
 		KrollDict result = new KrollDict();
 		result.put("email", user.getEmail());
+		result.put("emailVerified", user.isEmailVerified());
 		result.put("phoneNumber", user.getPhoneNumber());
 		result.put("providerID", user.getProviderId());
 		result.put("uid", user.getUid());

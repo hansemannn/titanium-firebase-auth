@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		24DE9E1211C5FE74003F90F6 /* FirebaseAuthModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* FirebaseAuthModuleAssets.m */; };
 		3A3049252645C1AE00D55944 /* FirebaseAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */; };
 		3A3049262645C1AE00D55944 /* GTMSessionFetcher.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */; };
+		3A3667832B2F33CC0082D229 /* RecaptchaInterop.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3667822B2F33CC0082D229 /* RecaptchaInterop.xcframework */; };
 		3AB0887E2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AB0887D2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework */; };
 		AA747D9F0F9514B9006C5449 /* FirebaseAuth_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* FirebaseAuth_Prefix.pch */; };
 		DB5CC2121F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB5CC2101F960DD1002E0B15 /* FirebaseAuthAuthCredentialProxy.h */; };
@@ -29,6 +30,7 @@
 		24DE9E1011C5FE74003F90F6 /* FirebaseAuthModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirebaseAuthModuleAssets.m; path = Classes/FirebaseAuthModuleAssets.m; sourceTree = "<group>"; };
 		3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FirebaseAuth.xcframework; path = platform/FirebaseAuth.xcframework; sourceTree = "<group>"; };
 		3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = GTMSessionFetcher.xcframework; path = platform/GTMSessionFetcher.xcframework; sourceTree = "<group>"; };
+		3A3667822B2F33CC0082D229 /* RecaptchaInterop.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = RecaptchaInterop.xcframework; path = platform/RecaptchaInterop.xcframework; sourceTree = "<group>"; };
 		3AB0887D2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FirebaseAppCheckInterop.xcframework; path = platform/FirebaseAppCheckInterop.xcframework; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* FirebaseAuth_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirebaseAuth_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		D2AAC07E0554694100DB518D /* libfirebase.auth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfirebase.auth.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +48,7 @@
 				3A3049252645C1AE00D55944 /* FirebaseAuth.xcframework in Frameworks */,
 				3A3049262645C1AE00D55944 /* GTMSessionFetcher.xcframework in Frameworks */,
 				3AB0887E2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework in Frameworks */,
+				3A3667832B2F33CC0082D229 /* RecaptchaInterop.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +80,7 @@
 				3A3049232645C1AE00D55944 /* FirebaseAuth.xcframework */,
 				3AB0887D2A63354C00E2A74A /* FirebaseAppCheckInterop.xcframework */,
 				3A3049242645C1AE00D55944 /* GTMSessionFetcher.xcframework */,
+				3A3667822B2F33CC0082D229 /* RecaptchaInterop.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
