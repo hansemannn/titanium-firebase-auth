@@ -166,6 +166,36 @@
   }];
 }
 
+- (void)signInWithApple:(id)arguments {
+  ENSURE_SINGLE_ARG(arguments, NSDictionary);
+
+  NSString *token = [TiUtils stringValue:@"token" properties:arguments];
+  NSString *nonce = [TiUtils stringValue:@"nonce" properties:arguments];
+  KrollCallback *callback = arguments[@"callback"];
+  NSDictionary<NSString *, NSString *> *name = arguments[@"name"];
+
+  NSPersonNameComponents *fullName = [NSPersonNameComponents new];
+  fullName.givenName = name[@"firstName"];
+  fullName.familyName = name[@"lastName"];
+
+  FIRAuthCredential *credential = [FIROAuthProvider appleCredentialWithIDToken:token rawNonce:nonce fullName:fullName];
+
+  // Sign in with the credential
+  [[FIRAuth auth] signInWithCredential:credential completion:^(FIRAuthDataResult * _Nullable authResult, NSError *error) {
+    if (error) {
+      return;
+    }
+
+    [callback call:@[@{
+      @"success": @(YES),
+      @"uid": NULL_IF_NIL(authResult.user.uid),
+      @"email": NULL_IF_NIL( authResult.user.email),
+      @"displayName": NULL_IF_NIL(authResult.user.displayName),
+      @"phoneNumber": NULL_IF_NIL(authResult.user.phoneNumber)
+    }] thisObject:self];
+  }];
+}
+
 - (void)sendVerificationEmail:(id)arguments
 {
   ENSURE_UI_THREAD(sendVerificationEmail, arguments);
