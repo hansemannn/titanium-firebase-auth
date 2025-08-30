@@ -153,7 +153,7 @@ GoogleSignIn.addEventListener("login", function(opt) {
 You can use this module in combination with [titanium-apple-sign-in](https://github.com/tidev/titanium-apple-sign-in). Implement `createLoginButton()` and use the returned `event.profile.identityToken` to call FirebaseAuth.signInWithApple(). An example code would look like this:
 
 ```js
-let AppleSignIn = require("ti.applesignin");
+const AppleSignIn = require("ti.applesignin");
 AppleSignIn.addEventListener('login', function(event) {
   if (!event.success) {
     return;
@@ -168,7 +168,7 @@ AppleSignIn.addEventListener('login', function(event) {
     },
   });
 });
-let btn = AppleSignIn.createLoginButton({});
+const btn = AppleSignIn.createLoginButton({});
 btn.addEventListener('click', function() {AppleSignIn.authorize();});
 ```
 
