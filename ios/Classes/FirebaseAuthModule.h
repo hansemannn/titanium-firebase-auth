@@ -27,6 +27,8 @@
 
 - (void)signInWithCustomToken:(id)arguments;
 
+- (void)signInWithApple:(id)arguments;
+
 - (void)signOut:(id)arguments;
 
 - (void)deleteUser:(id)callback;

@@ -28,6 +28,10 @@ thank you!
 
 ##### `signInWithEmail(parameters)` (Dictionary)
 
+##### `signInWithGoogle({idToken:string, callback:function})` (Android only)
+
+##### `signInWithApple({idToken:string, callback:function})` (iOS only)
+
 ##### `signOut(parameters)` (Dictionary)
 
 ##### `signInWithCredential(parameters)` (Dictionary)
@@ -113,10 +117,72 @@ FirebaseAuth.signInWithEmail({
 });
 ```
 
-## Build
+## Sign-in with Google (Android only)
+
+You can use this module in combination with [titanium-google-signin](https://github.com/hansemannn/titanium-google-signin). Implement the `signIn()` methods from `titanium-google-signin` and use the returned `user.authentication.idToken` to call FirebaseAuth.signInWithGoogle(). An example code would look like this:
+
 ```js
+import GoogleSignIn from 'ti.googlesignin';
+import FirebaseAuth from 'firebase.auth';
+
+GoogleSignIn.initialize({
+	clientID: 'your-client-id',
+});
+
+GoogleSignIn.signIn();
+
+GoogleSignIn.addEventListener("login", function(opt) {
+	let idToken = opt.user.authentication.idToken;
+	if (idToken != "" && idToken != undefined) {
+		FirebaseAuth.signInWithGoogle({
+			idToken: idToken,
+			callback: function(e) {
+				if (e.success) {
+					alert('Logged in!');
+				} else {
+				Ti.API.error('Error logging in: ' + e.error);
+				}
+			}
+		})
+	}
+})
+```
+
+## Sign-in with Apple (iOS only)
+
+You can use this module in combination with [titanium-apple-sign-in](https://github.com/tidev/titanium-apple-sign-in). Implement `createLoginButton()` and use the returned `event.profile.identityToken` to call FirebaseAuth.signInWithApple(). An example code would look like this:
+
+```js
+const AppleSignIn = require("ti.applesignin");
+AppleSignIn.addEventListener('login', function(event) {
+  if (!event.success) {
+    return;
+  }
+
+  FirebaseAuth.signInWithApple({
+    idToken: event.profile.identityToken,
+    callback: function(evt) {
+			if (evt.success) {
+				// logged in
+			}
+    },
+  });
+});
+const btn = AppleSignIn.createLoginButton({});
+btn.addEventListener('click', function() {AppleSignIn.authorize();});
+```
+
+## Build
+iOS:
+```bash
 cd ios
-appc ti build -p ios --build-only
+ti build -p ios --build-only
+```
+
+Android:
+```bash
+cd android
+ti build -p android --build-only
 ```
 
 ## Legal
